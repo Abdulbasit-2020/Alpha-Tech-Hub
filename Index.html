@@ -1,0 +1,1028 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description" content="Alpha Tech Hub builds modern websites and digital solutions to help businesses grow online.">
+
+  <title>Alpha Tech Hub | Build. Design. Grow.</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== GLOBAL STYLES ===== */
+
+    :root {
+      --bg: #050b1b;
+      --surface: #0b1630;
+      --blue: #08a5ff;
+      --purple: #9254ff;
+      --white: #f4f7ff;
+      --muted: #b8c6e0;
+      --border: rgba(110, 165, 255, 0.2);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.7;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(1120px, 90%);
+      margin: auto;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #08a5ff, #a56aff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 13px 23px;
+      border-radius: 9px;
+      font-weight: 700;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(110deg, #078dff, #9254ff);
+      color: white;
+      box-shadow: 0 8px 28px rgba(8, 130, 255, 0.17);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 32px rgba(110, 80, 255, 0.3);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--blue);
+      color: white;
+    }
+
+    .btn-outline:hover {
+      background: rgba(8, 165, 255, 0.12);
+    }
+
+    /* ===== NAVIGATION ===== */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(5, 11, 27, 0.94);
+      backdrop-filter: blur(15px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav {
+      min-height: 78px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo {
+      font-size: 1.35rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .logo-mark {
+      color: var(--blue);
+      margin-right: 7px;
+    }
+
+    .logo small {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 3px;
+      line-height: 1.4;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-size: 0.9rem;
+      transition: 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--blue);
+    }
+
+    .menu-toggle {
+      display: none;
+      background: transparent;
+      color: white;
+      border: 1px solid var(--border);
+      padding: 7px 12px;
+      border-radius: 7px;
+      font-size: 1.3rem;
+      cursor: pointer;
+    }
+
+    /* ===== HERO SECTION ===== */
+
+    .hero {
+      padding: 85px 0 90px;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 80% 40%,
+        rgba(42, 73, 190, 0.18), transparent 55%);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 45px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 6px 13px;
+      margin-bottom: 20px;
+      background: rgba(8, 165, 255, 0.1);
+      border: 1px solid var(--border);
+      color: #70caff;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.3rem, 5vw, 3.8rem);
+      line-height: 1.14;
+      letter-spacing: -2px;
+      margin-bottom: 22px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 520px;
+      margin-bottom: 28px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .hero-image {
+      position: relative;
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: 410px;
+      object-fit: cover;
+      border-radius: 22px;
+      border: 1px solid var(--border);
+      box-shadow: 0 25px 80px rgba(0, 115, 255, 0.16);
+    }
+
+    .image-label {
+      position: absolute;
+      bottom: 18px;
+      left: 18px;
+      right: 18px;
+      padding: 14px 18px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(5, 11, 27, 0.86);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+    }
+
+    .image-label strong {
+      display: block;
+      font-size: 0.95rem;
+    }
+
+    .image-label span {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* ===== BENEFITS ===== */
+
+    .benefits {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 22, 48, 0.65);
+      padding: 35px 0;
+    }
+
+    .benefit-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 25px;
+    }
+
+    .benefit {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+    }
+
+    .benefit-icon {
+      font-size: 1.5rem;
+      color: var(--blue);
+    }
+
+    .benefit h3 {
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+
+    .benefit p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ===== SERVICES PREVIEW ===== */
+
+    .section {
+      padding: 85px 0;
+    }
+
+    .section-heading {
+      text-align: center;
+      max-width: 650px;
+      margin: 0 auto 42px;
+    }
+
+    .section-heading .tag {
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(1.9rem, 4vw, 2.7rem);
+      line-height: 1.3;
+      margin: 10px 0;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .service-card {
+      padding: 27px;
+      background: linear-gradient(145deg,
+        rgba(15, 31, 64, 0.95),
+        rgba(7, 15, 34, 0.95));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      transition: 0.3s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--blue);
+    }
+
+    .service-icon {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      font-size: 1.6rem;
+      background: rgba(8, 165, 255, 0.12);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      margin-bottom: 20px;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+
+    .service-card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 18px;
+    }
+
+    .text-link {
+      color: #55bdff;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .text-link:hover {
+      color: #bca0ff;
+    }
+
+    .center-action {
+      text-align: center;
+      margin-top: 38px;
+    }
+
+    /* ===== ABOUT PREVIEW ===== */
+
+    .about {
+      background: rgba(11, 22, 48, 0.5);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      align-items: center;
+      gap: 50px;
+    }
+
+    .about-image img {
+      width: 100%;
+      height: 340px;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+    }
+
+    .about-copy h2 {
+      font-size: 2.3rem;
+      line-height: 1.25;
+      margin: 12px 0 18px;
+    }
+
+    .about-copy p {
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .check-list {
+      list-style: none;
+      margin-bottom: 25px;
+    }
+
+    .check-list li {
+      margin: 9px 0;
+      color: #dce8ff;
+    }
+
+    .check-list li::before {
+      content: "✓";
+      color: #32d6a0;
+      font-weight: 800;
+      margin-right: 10px;
+    }
+
+    /* ===== PROMOTIONAL CTA ===== */
+
+    .cta {
+      padding: 75px 0;
+    }
+
+    .cta-box {
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      padding: 55px 25px;
+      border-radius: 22px;
+      border: 1px solid rgba(130, 130, 255, 0.35);
+      background:
+        radial-gradient(ellipse at 15% 15%,
+          rgba(0, 153, 255, 0.22), transparent 45%),
+        radial-gradient(ellipse at 85% 85%,
+          rgba(147, 70, 255, 0.23), transparent 45%),
+        #0b1630;
+    }
+
+    .cta-box h2 {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      line-height: 1.3;
+      margin-bottom: 15px;
+    }
+
+    .cta-box p {
+      color: var(--muted);
+      margin-bottom: 25px;
+    }
+
+    /* ===== FOOTER ===== */
+
+    footer {
+      border-top: 1px solid var(--border);
+      background: #030815;
+      padding: 38px 0 20px;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      flex-wrap: wrap;
+      padding-bottom: 28px;
+    }
+
+    .footer-description {
+      max-width: 300px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-top: 12px;
+    }
+
+    .footer-links h3 {
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      display: block;
+      color: var(--muted);
+      font-size: 0.87rem;
+      margin: 7px 0;
+    }
+
+    .footer-links a:hover {
+      color: var(--blue);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: #8090ad;
+      font-size: 0.8rem;
+    }
+
+    /* ===== MOBILE RESPONSIVENESS ===== */
+
+    @media (max-width: 850px) {
+      .nav-links {
+        gap: 14px;
+      }
+
+      .nav-links a {
+        font-size: 0.8rem;
+      }
+
+      .hero-grid {
+        gap: 25px;
+      }
+
+      .hero-image img {
+        height: 340px;
+      }
+
+      .benefit-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .service-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      nav {
+        min-height: 70px;
+      }
+
+      .logo {
+        font-size: 1.15rem;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        padding: 22px 5%;
+        background: #081127;
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+      }
+
+      .nav-links.show {
+        display: flex;
+      }
+
+      .nav-links a {
+        padding: 12px 0;
+        font-size: 0.95rem;
+      }
+
+      .nav-cta {
+        display: none;
+      }
+
+      .hero {
+        padding: 55px 0 60px;
+      }
+
+      .hero-grid,
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 2.55rem;
+      }
+
+      .hero p {
+        font-size: 0.95rem;
+      }
+
+      .hero-image img {
+        height: 290px;
+      }
+
+      .benefit-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 24px 15px;
+      }
+
+      .benefit {
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .section {
+        padding: 65px 0;
+      }
+
+      .service-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .service-card {
+        padding: 23px;
+      }
+
+      .about-grid {
+        gap: 30px;
+      }
+
+      .about-image img {
+        height: 270px;
+      }
+
+      .about-copy h2 {
+        font-size: 2rem;
+      }
+
+      .cta {
+        padding: 50px 0;
+      }
+
+      .cta-box {
+        padding: 40px 20px;
+      }
+
+      .footer-top {
+        flex-direction: column;
+        gap: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+  <header>
+    <nav class="container">
+
+      <a href="index.html" class="logo">
+        <span class="logo-mark">▲</span>
+        Alpha <span class="gradient-text">Tech Hub</span>
+        <small>BUILD · DESIGN · GROW</small>
+      </a>
+
+      <button class="menu-toggle"
+        id="menuToggle"
+        aria-label="Toggle navigation"
+        aria-expanded="false">
+        ☰
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" class="active">Home</a>
+        <a href="services.html">Services</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+      </div>
+
+      <a href="contact.html" class="btn btn-primary nav-cta">
+        Get Started →
+      </a>
+
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- HERO / WELCOME -->
+    <section class="hero">
+      <div class="container hero-grid">
+
+        <div class="hero-content">
+
+          <span class="eyebrow">
+            🚀 Welcome to Alpha Tech Hub
+          </span>
+
+          <h1>
+            Turning Your Ideas Into
+            <span class="gradient-text">
+              Powerful Digital Solutions
+            </span>
+          </h1>
+
+          <p>
+            Your business deserves more than just a website.
+            We create modern, responsive websites and digital
+            solutions that help businesses build their brand,
+            reach more customers, and grow online.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="contact.html" class="btn btn-primary">
+              Start Your Project →
+            </a>
+
+            <a href="services.html" class="btn btn-outline">
+              Explore Services
+            </a>
+          </div>
+
+        </div>
+
+        <div class="hero-image">
+
+          <img
+            src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1100&q=85"
+            alt="Web developer working on a computer"
+            fetchpriority="high"
+          >
+
+          <div class="image-label">
+            <strong>💡 Your Vision. Our Technology.</strong>
+            <span>Let's build something extraordinary together.</span>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- WHY CHOOSE US -->
+    <section class="benefits">
+      <div class="container benefit-grid">
+
+        <div class="benefit">
+          <span class="benefit-icon">⌘</span>
+          <div>
+            <h3>Modern Technology</h3>
+            <p>Solutions built with modern web technologies.</p>
+          </div>
+        </div>
+
+        <div class="benefit">
+          <span class="benefit-icon">▣</span>
+          <div>
+            <h3>Responsive Design</h3>
+            <p>Designed for mobile phones, tablets, and computers.</p>
+          </div>
+        </div>
+
+        <div class="benefit">
+          <span class="benefit-icon">◇</span>
+          <div>
+            <h3>Business-Focused</h3>
+            <p>Digital experiences designed around your goals.</p>
+          </div>
+        </div>
+
+        <div class="benefit">
+          <span class="benefit-icon">♡</span>
+          <div>
+            <h3>Customer Support</h3>
+            <p>Friendly communication throughout your project.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SERVICES PREVIEW -->
+    <section class="section" id="services">
+      <div class="container">
+
+        <div class="section-heading">
+          <span class="tag">What We Do</span>
+          <h2>Our <span class="gradient-text">Services</span></h2>
+          <p>
+            From building your first website to establishing
+            your digital presence, we're here to help turn
+            your ideas into reality.
+          </p>
+        </div>
+
+        <div class="service-grid">
+
+          <article class="service-card">
+            <div class="service-icon">💻</div>
+            <h3>Website Development</h3>
+            <p>
+              Custom websites for businesses, brands,
+              schools, organizations, and individuals.
+            </p>
+            <a href="services.html" class="text-link">
+              Learn More →
+            </a>
+          </article>
+
+          <article class="service-card">
+            <div class="service-icon">🎨</div>
+            <h3>Website Design</h3>
+            <p>
+              Beautiful layouts, attractive interfaces,
+              and engaging digital experiences.
+            </p>
+            <a href="services.html" class="text-link">
+              Learn More →
+            </a>
+          </article>
+
+          <article class="service-card">
+            <div class="service-icon">📱</div>
+            <h3>Responsive Websites</h3>
+            <p>
+              Websites that adapt to different screen sizes
+              for a smooth mobile and desktop experience.
+            </p>
+            <a href="services.html" class="text-link">
+              Learn More →
+            </a>
+          </article>
+
+          <article class="service-card">
+            <div class="service-icon">⚙️</div>
+            <h3>Web Applications</h3>
+            <p>
+              Interactive web experiences and useful tools
+              built around your business needs.
+            </p>
+            <a href="services.html" class="text-link">
+              Learn More →
+            </a>
+          </article>
+
+          <article class="service-card">
+            <div class="service-icon">🚀</div>
+            <h3>Website Improvements</h3>
+            <p>
+              Help improving existing websites, layouts,
+              usability, and mobile experiences.
+            </p>
+            <a href="services.html" class="text-link">
+              Learn More →
+            </a>
+          </article>
+
+          <article class="service-card">
+            <div class="service-icon">✨</div>
+            <h3>Digital Solutions</h3>
+            <p>
+              Practical technology solutions to help
+              individuals and businesses work smarter.
+            </p>
+            <a href="services.html" class="text-link">
+              Learn More →
+            </a>
+          </article>
+
+        </div>
+
+        <div class="center-action">
+          <a href="services.html" class="btn btn-outline">
+            View All Services →
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ABOUT US PREVIEW -->
+    <section class="section about" id="about">
+      <div class="container about-grid">
+
+        <div class="about-image">
+          <img
+            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1000&q=85"
+            alt="Creative team collaborating on a project"
+            loading="lazy"
+          >
+        </div>
+
+        <div class="about-copy">
+
+          <span class="tag gradient-text">
+            ABOUT ALPHA TECH HUB
+          </span>
+
+          <h2>
+            Technology That Helps
+            <span class="gradient-text">You Grow</span>
+          </h2>
+
+          <p>
+            At Alpha Tech Hub, we believe technology should
+            help people solve real problems and unlock new
+            opportunities. We focus on creating useful,
+            attractive, and accessible digital experiences
+            for businesses and individuals.
+          </p>
+
+          <ul class="check-list">
+            <li>Modern and user-friendly designs</li>
+            <li>Mobile-friendly website experiences</li>
+            <li>Solutions tailored to your project</li>
+            <li>A focus on quality and communication</li>
+          </ul>
+
+          <a href="about.html" class="btn btn-primary">
+            Discover Our Story →
+          </a>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ADVERTISEMENT / CALL TO ACTION -->
+    <section class="cta">
+      <div class="container">
+        <div class="cta-box">
+
+          <span class="eyebrow">
+            YOUR NEXT BIG IDEA STARTS HERE
+          </span>
+
+          <h2>
+            Ready to Take Your Business
+            <span class="gradient-text">Online?</span>
+          </h2>
+
+          <p>
+            Have a business, brand, or idea you want to bring
+            to life? Let's discuss your project and explore
+            the right digital solution for you.
+          </p>
+
+          <a href="contact.html" class="btn btn-primary">
+            Let's Talk About Your Project →
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+
+      <div class="footer-top">
+
+        <div>
+          <a href="index.html" class="logo">
+            <span class="logo-mark">▲</span>
+            Alpha <span class="gradient-text">Tech Hub</span>
+            <small>BUILD · DESIGN · GROW</small>
+          </a>
+
+          <p class="footer-description">
+            Building digital experiences that help ideas,
+            brands, and businesses move forward.
+          </p>
+        </div>
+
+        <div class="footer-links">
+          <h3>Quick Links</h3>
+          <a href="index.html">Home</a>
+          <a href="services.html">Our Services</a>
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact Us</a>
+        </div>
+
+        <div class="footer-links">
+          <h3>Get In Touch</h3>
+          <a href="https://wa.me/2349157775791"
+             target="_blank"
+             rel="noopener noreferrer">
+            WhatsApp Us
+          </a>
+          <a href="contact.html">Request a Project</a>
+        </div>
+
+      </div>
+
+      <div class="copyright">
+        © <span id="year"></span> Alpha Tech Hub.
+        All rights reserved.
+        <br>
+        Build. Design. Grow.
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    // Mobile navigation menu
+    const menuToggle = document.getElementById("menuToggle");
+    const navLinks = document.getElementById("navLinks");
+
+    menuToggle.addEventListener("click", function () {
+      const isOpen = navLinks.classList.toggle("show");
+
+      menuToggle.setAttribute("aria-expanded", isOpen);
+      menuToggle.textContent = isOpen ? "✕" : "☰";
+    });
+
+    // Close menu when a navigation link is clicked
+    navLinks.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        navLinks.classList.remove("show");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.textContent = "☰";
+      });
+    });
+
+    // Automatically update copyright year
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+  </script>
+
+</body>
+</html>
