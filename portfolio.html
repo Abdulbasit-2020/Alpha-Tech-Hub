@@ -11,9 +11,7 @@
         font-family: Arial, sans-serif;
     }
 
-    html {
-        scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
         background: #080d1c;
@@ -43,10 +41,7 @@
         transition: 0.3s;
     }
 
-    nav a:hover,
-    nav a.active {
-        color: #38a5ff;
-    }
+    nav a:hover, nav a.active { color: #38a5ff; }
 
     .hero {
         text-align: center;
@@ -54,14 +49,8 @@
         background: linear-gradient(135deg, #101d3b, #17113b);
     }
 
-    .hero h1 {
-        font-size: 42px;
-        margin-bottom: 15px;
-    }
-
-    .hero h1 span {
-        color: #38a5ff;
-    }
+    .hero h1 { font-size: 42px; margin-bottom: 15px; }
+    .hero h1 span { color: #38a5ff; }
 
     .hero p {
         max-width: 650px;
@@ -70,30 +59,15 @@
         line-height: 1.8;
     }
 
-    .portfolio {
-        padding: 70px 8%;
-    }
+    .portfolio { padding: 70px 8%; }
 
-    .section-heading {
-        text-align: center;
-        margin-bottom: 45px;
-    }
-
-    .section-heading h2 {
-        font-size: 30px;
-        margin-bottom: 12px;
-    }
-
-    .section-heading p {
-        color: #9daac1;
-    }
+    .section-heading { text-align: center; margin-bottom: 45px; }
+    .section-heading h2 { font-size: 30px; margin-bottom: 12px; }
+    .section-heading p { color: #9daac1; }
 
     .project-grid {
         display: grid;
-        grid-template-columns: repeat(
-            auto-fit,
-            minmax(260px, 1fr)
-        );
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 28px;
     }
 
@@ -113,25 +87,15 @@
 
     .project-image {
         height: 190px;
-        background: linear-gradient(
-            135deg,
-            #123c72,
-            #35215e
-        );
+        background: linear-gradient(135deg, #123c72, #35215e);
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 55px;
     }
 
-    .project-info {
-        padding: 24px;
-    }
-
-    .project-info h3 {
-        font-size: 21px;
-        margin-bottom: 12px;
-    }
+    .project-info { padding: 24px; }
+    .project-info h3 { font-size: 21px; margin-bottom: 12px; }
 
     .project-info p {
         color: #aebbd0;
@@ -168,9 +132,7 @@
         transition: 0.3s;
     }
 
-    .visit-btn:hover {
-        background: #0869bd;
-    }
+    .visit-btn:hover { background: #0869bd; }
 
     .contact {
         text-align: center;
@@ -178,15 +140,8 @@
         background: #101b33;
     }
 
-    .contact h2 {
-        font-size: 30px;
-        margin-bottom: 15px;
-    }
-
-    .contact p {
-        color: #b8c5da;
-        margin-bottom: 20px;
-    }
+    .contact h2 { font-size: 30px; margin-bottom: 15px; }
+    .contact p { color: #b8c5da; margin-bottom: 20px; }
 
     footer {
         text-align: center;
@@ -197,30 +152,16 @@
     }
 
     @media(max-width: 600px) {
-        header {
-            flex-direction: column;
-            gap: 18px;
-        }
-
-        nav a {
-            margin: 0 7px;
-            font-size: 12px;
-        }
-
-        .hero h1 {
-            font-size: 32px;
-        }
-
-        .portfolio {
-            padding: 50px 6%;
-        }
+        header { flex-direction: column; gap: 18px; }
+        nav a { margin: 0 7px; font-size: 12px; }
+        .hero h1 { font-size: 32px; }
+        .portfolio { padding: 50px 6%; }
     }
 </style>
-
-</head><body><header>
-
+</head>
+<body>
+<header>
     <div class="logo">Alpha Tech Hub</div>
-
     <nav>
         <a href="index.html">Home</a>
         <a href="services.html">Services</a>
@@ -228,105 +169,63 @@
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
     </nav>
-
 </header>
 
-
 <section class="hero">
-
     <h1>Our <span>Portfolio</span></h1>
-
     <p>
         Explore some of our web development projects.
         We transform ideas into functional, modern
         and professional digital experiences.
     </p>
-
 </section>
 
-
 <section class="portfolio">
-
     <div class="section-heading">
-
         <h2>Our Projects</h2>
-
-        <p>
-            Discover what we have designed and developed.
-        </p>
-
+        <p>Discover what we have designed and developed.</p>
     </div>
 
-
     <div class="project-grid">
-
-
-        <!-- PROJECT 1 -->
-
+        <!-- PROJECT 1: SIRAJUL UMMAH INSTITUTE -->
         <div class="project-card">
-
-            <div class="project-image">
-                🎓
-            </div>
-
+            <div class="project-image">🎓</div>
             <div class="project-info">
-
-                <span class="project-category">
-                    Education Platform
-                </span>
-
-                <h3>Sirajul Ummah Academy</h3>
-
+                <span class="project-category">Education Platform</span>
+                <h3>Sirajul Ummah Institute</h3>
                 <p>
-                    An educational platform designed to
-                    support Islamic and modern education
-                    through digital learning services.
+                    An online institute website supporting Islamic
+                    and modern education through digital learning
+                    and educational resources.
                 </p>
-
                 <div class="technologies">
-                    HTML · CSS · JavaScript · Firebase
+                    Educational Website · Responsive Web Design
                 </div>
-
                 <a
-                    href="YOUR_SIRAJUL_WEBSITE_URL"
+                    href="https://sirajul-ummah.com.ng/index.html"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="visit-btn"
                 >
                     Visit Website ↗
                 </a>
-
             </div>
-
         </div>
 
-
         <!-- PROJECT 2 -->
-
         <div class="project-card">
-
-            <div class="project-image">
-                💼
-            </div>
-
+            <div class="project-image">💼</div>
             <div class="project-info">
-
-                <span class="project-category">
-                    Business Website
-                </span>
-
+                <span class="project-category">Business Website</span>
                 <h3>Alpha Mail</h3>
-
                 <p>
                     An email solutions platform concept
                     designed to help businesses manage
                     professional email services.
                 </p>
-
                 <div class="technologies">
                     HTML · CSS · JavaScript · Firebase
                 </div>
-
                 <a
                     href="YOUR_ALPHA_MAIL_WEBSITE_URL"
                     target="_blank"
@@ -335,11 +234,8 @@
                 >
                     Visit Website ↗
                 </a>
-
             </div>
-
         </div>
-
 
         <!-- PROJECT 3: NOVA MARKET -->
         <div class="project-card">
@@ -362,45 +258,25 @@
                 </a>
             </div>
         </div>
-
-        <!-- ADD MORE PROJECTS HERE -->
-
     </div>
-
 </section>
-
 
 <section class="contact">
-
     <h2>Have a Project in Mind?</h2>
-
-    <p>
-        Let's work together to build something amazing.
-    </p>
-
-    <a href="contact.html" class="visit-btn">
-        Contact Us
-    </a>
-
+    <p>Let's work together to build something amazing.</p>
+    <a href="contact.html" class="visit-btn">Contact Us</a>
 </section>
 
-
 <footer>
-
     <p>
         &copy; <span id="year"></span>
         Alpha Tech Hub. All Rights Reserved.
     </p>
-
 </footer>
 
-
 <script>
-
     document.getElementById("year").textContent =
         new Date().getFullYear();
-
 </script>
-
 </body>
 </html>
