@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Account | Alpha Tech Hub</title>
+<meta name="description" content="Create an Alpha Tech Hub account or sign in to access your account.">
+<link rel="stylesheet" href="style.css">
+<style>
+.auth-section{min-height:calc(100vh - 82px);display:grid;place-items:center;padding:60px 20px}
+.auth-card{width:min(100%,480px);background:var(--card);border:1px solid var(--border);border-radius:22px;padding:clamp(22px,5vw,38px);box-shadow:0 25px 80px rgba(0,0,0,.25)}
+.auth-card h1{font-size:clamp(28px,6vw,38px);line-height:1.2;margin:10px 0}
+.auth-card p{color:var(--muted)}
+.auth-tabs{display:flex;gap:8px;margin:24px 0}
+.auth-tabs button{flex:1;padding:12px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--text);font-weight:700}
+.auth-tabs button.active{background:var(--gradient);border-color:transparent}
+.auth-form{display:grid;gap:15px}
+.auth-form label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
+.auth-form input{width:100%;padding:13px 14px;border-radius:10px;border:1px solid var(--border);background:#0a1020;color:var(--text);outline:none}
+.auth-form input:focus{border-color:var(--primary)}
+.auth-form .btn{width:100%;margin-top:4px}
+.auth-link{display:block;text-align:right;background:none;border:0;color:#79a9ff;font-size:13px;padding:6px 0}
+.auth-status{min-height:24px;margin-top:15px;font-size:14px;overflow-wrap:anywhere}
+.auth-status.error{color:#ff8a8a}.auth-status.success{color:#63e7b1}
+.auth-note{font-size:12px;margin-top:20px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header class="site-header">
+<div class="container navbar">
+<a href="index.html" class="brand"><span class="brand-icon">A</span><span class="brand-text"><strong>Alpha Tech Hub</strong><small>BUILD. DESIGN. GROW.</small></span></a>
+<a class="btn btn-outline" href="index.html">← Back to website</a>
+</div>
+</header>
+<main class="auth-section">
+<section class="auth-card" aria-labelledby="authTitle">
+<span class="section-label">ALPHA TECH HUB ACCOUNT</span>
+<h1 id="authTitle">Welcome to <span class="gradient-text">Alpha.</span></h1>
+<p id="authIntro">Sign in or create an account to get started.</p>
+<div class="auth-tabs" role="tablist">
+<button id="loginTab" class="active" type="button">Sign in</button>
+<button id="registerTab" type="button">Create account</button>
+</div>
+<form id="authForm" class="auth-form">
+<div id="nameField" hidden>
+<label for="fullName">Full name</label>
+<input id="fullName" autocomplete="name" maxlength="80" placeholder="Your full name">
+</div>
+<div>
+<label for="email">Email address</label>
+<input id="email" type="email" autocomplete="email" required placeholder="you@example.com">
+</div>
+<div>
+<label for="password">Password</label>
+<input id="password" type="password" autocomplete="current-password" minlength="6" required placeholder="At least 6 characters">
+</div>
+<button id="resetLink" class="auth-link" type="button">Forgot password?</button>
+<button id="submitButton" class="btn btn-primary" type="submit">Sign in</button>
+</form>
+<p id="authStatus" class="auth-status" role="status" aria-live="polite"></p>
+<p class="auth-note">Passwords are managed by Firebase Authentication. Alpha Tech Hub does not store your password in its database.</p>
+</section>
+</main>
+<script type="module" src="auth.js"></script>
+</body>
+</html>
