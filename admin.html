@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Console | Alpha Tech Hub</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.admin-main{padding:48px 0 80px}
+.admin-banner{border:1px solid var(--border);border-radius:14px;padding:15px;margin-bottom:24px;color:var(--muted)}
+.admin-title{margin-bottom:28px}
+.admin-title h1{font-size:clamp(30px,5vw,44px);margin:8px 0}
+.admin-title p{color:var(--muted)}
+.admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.admin-card{padding:24px;border:1px solid var(--border);border-radius:18px;background:var(--card)}
+.admin-card h2{font-size:18px;margin-bottom:8px}
+.admin-card p{color:var(--muted);font-size:14px}
+.admin-card .status{display:inline-block;margin-top:12px;padding:6px 10px;border-radius:20px;border:1px solid var(--border);font-size:12px;color:#91aaff}
+.admin-controls{display:flex;gap:10px;flex-wrap:wrap}
+@media(max-width:620px){.admin-grid{grid-template-columns:1fr}.admin-card{padding:20px}}
+</style>
+</head>
+<body>
+<header class="site-header">
+<div class="container navbar">
+<a href="index.html" class="brand"><span class="brand-icon">A</span><span class="brand-text"><strong>Alpha Tech Hub</strong><small>ADMIN CONSOLE</small></span></a>
+<div class="admin-controls"><a href="dashboard.html" class="btn btn-outline">User dashboard</a><button id="adminLogout" class="btn btn-outline" type="button">Sign out</button></div>
+</div>
+</header>
+<main class="admin-main">
+<div class="container">
+<div id="adminStatus" class="admin-banner" role="status" aria-live="polite">Checking administrator access…</div>
+<section class="admin-title"><span class="section-label">PRIVATE ADMINISTRATION</span><h1>Admin <span class="gradient-text">Console</span></h1><p>Central management workspace for Alpha Tech Hub.</p></section>
+<div class="admin-grid">
+<article class="admin-card"><h2>Clients</h2><p>Review client profiles and account activity.</p><span class="status">Module pending</span></article>
+<article class="admin-card"><h2>Projects</h2><p>Create projects, assign milestones, and update progress.</p><span class="status">Module pending</span></article>
+<article class="admin-card"><h2>Orders & Requests</h2><p>Review new website and service requests.</p><span class="status">Module pending</span></article>
+<article class="admin-card"><h2>Messages</h2><p>Manage incoming inquiries and client communication.</p><span class="status">Module pending</span></article>
+<article class="admin-card"><h2>Files</h2><p>Manage project files and client deliverables.</p><span class="status">Module pending</span></article>
+<article class="admin-card"><h2>Platform settings</h2><p>Review site settings, service information, and admin permissions.</p><span class="status">Module pending</span></article>
+</div>
+</div>
+</main>
+<script type="module" src="admin.js"></script>
+</body>
+</html>
