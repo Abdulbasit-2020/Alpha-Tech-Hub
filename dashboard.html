@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard | Alpha Tech Hub</title>
+<meta name="description" content="Your personal Alpha Tech Hub account dashboard.">
+<link rel="stylesheet" href="style.css">
+<style>
+.dashboard-wrap{padding:55px 0 80px}
+.dash-head{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:32px}
+.dash-head h1{font-size:clamp(30px,5vw,46px);line-height:1.2;margin:8px 0}
+.dash-head p{color:var(--muted)}
+.dash-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.dash-card{padding:25px;border:1px solid var(--border);border-radius:18px;background:var(--card)}
+.dash-card h2{font-size:18px;margin-bottom:10px}
+.dash-card p{color:var(--muted);font-size:14px}
+.dash-card .dash-value{font-size:16px;color:var(--text);overflow-wrap:anywhere}
+.dash-status{margin:0 0 20px;padding:14px 16px;border:1px solid var(--border);border-radius:12px;color:var(--muted)}
+.dash-status.error{color:#ff8a8a}
+.dash-status.success{color:#63e7b1}
+.dash-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.dash-placeholder{min-height:130px;display:grid;align-content:center;gap:8px}
+.dash-placeholder .placeholder-icon{font-size:24px;color:#91aaff}
+@media(max-width:650px){.dash-grid{grid-template-columns:1fr}.dash-card{padding:20px}.dashboard-wrap{padding-top:35px}}
+</style>
+</head>
+<body>
+<header class="site-header">
+<div class="container navbar">
+<a href="index.html" class="brand"><span class="brand-icon">A</span><span class="brand-text"><strong>Alpha Tech Hub</strong><small>BUILD. DESIGN. GROW.</small></span></a>
+<button id="logoutButton" class="btn btn-outline" type="button">Sign out</button>
+</div>
+</header>
+<main class="dashboard-wrap">
+<div class="container">
+<div id="dashboardStatus" class="dash-status" role="status" aria-live="polite">Checking your account…</div>
+<section class="dash-head">
+<div><span class="section-label">PERSONAL DASHBOARD</span><h1>Welcome, <span id="userName" class="gradient-text">Member</span></h1><p>Your Alpha Tech Hub account overview.</p></div>
+</section>
+<div class="dash-grid">
+<article class="dash-card"><h2>Account profile</h2><p>Name</p><p class="dash-value" id="profileName">—</p><p style="margin-top:12px">Email</p><p class="dash-value" id="profileEmail">—</p></article>
+<article class="dash-card"><h2>Account security</h2><p>Email verification status</p><p class="dash-value" id="verificationStatus">Checking…</p><div class="dash-actions"><button id="resendVerification" class="btn btn-outline" type="button" hidden>Resend verification</button></div></article>
+<article class="dash-card dash-placeholder"><span class="placeholder-icon">◈</span><h2>Projects</h2><p>Your project space will appear here as project management is added.</p></article>
+<article class="dash-card dash-placeholder"><span class="placeholder-icon">✉</span><h2>Messages & support</h2><p>Client communication tools are planned for a future update.</p><div class="dash-actions"><a class="btn btn-outline" href="contact.html">Contact Alpha Tech Hub</a></div></article>
+</div>
+</div>
+</main>
+<script type="module" src="dashboard.js"></script>
+</body>
+</html>
