@@ -92,8 +92,8 @@ form.addEventListener("submit", async (event) => {
         setStatus("Your email is not verified yet. We sent a fresh verification link; check your inbox.", "error");
         return;
       }
-      setStatus("Signed in successfully. Your account is ready; dashboard features are coming next.", "success");
-      // For now, keep the successful login on this page until the dashboard is built.
+      setStatus("Signed in successfully. Opening your dashboard…", "success");
+      window.location.href = "dashboard.html";
     }
   } catch (error) {
     const messages = {
