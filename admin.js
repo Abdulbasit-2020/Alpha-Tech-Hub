@@ -33,7 +33,9 @@ async function loadClients(){
   const data=snap.exists()?snap.val():{};
   clients=Object.entries(data).map(([uid,p])=>({uid,profile:p||{},name:p.fullName||"Unnamed user",email:p.email||"No email",createdAt:p.createdAt?new Date(p.createdAt).toLocaleDateString():"Unknown"}));
   totalClients.textContent=clients.length;
+  updateProjectClientOptions();
   renderClients();
+  await loadProjects();
  }catch(error){
   clientCount.textContent="Unable to load";
   totalClients.textContent="—";
