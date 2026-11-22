@@ -1,6 +1,6 @@
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged, signOut, getIdTokenResult } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-import { ref, get } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+import { ref, get, push, set } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
 
 const status=document.getElementById("adminStatus");
 const logout=document.getElementById("adminLogout");
@@ -63,7 +63,37 @@ closeProfile.addEventListener("click",closeModal);
 profileModal.addEventListener("click",event=>{if(event.target===profileModal)closeModal();});
 document.addEventListener("keydown",event=>{if(event.key==="Escape")closeModal();});
 logout.addEventListener("click",async()=>{logout.disabled=true;try{await signOut(auth);window.location.replace("account.html");}catch(error){showStatus("Sign-out failed. Please retry.");logout.disabled=false;}});
-onAuthStateChanged(auth,async(user)=>{
+
+const projectForm=document.getElementById("projectForm");
+const projectList=document.getElementById("projectList");
+const projectFormStatus=document.getElementById("projectFormStatus");
+const projectClient=document.getElementById("projectClient");
+const refreshProjects=document.getElementById("refreshProjects");
+let projectRecords=[];
+function updateProjectClientOptions(){
+ projectClient.innerHTML='<option value="">Select a client</option>'+clients.map(c=>'<option value="'+escapeHtml(c.uid)+'">'+escapeHtml(c.name)+' — '+escapeHtml(c.email)+'</option>').join("");
+}
+function renderProjects(){
+ if(!projectRecords.length){projectList.innerHTML='<div class="client-empty">No projects found yet.</div>';return;}
+ projectList.innerHTML=projectRecords.map(p=>'<article class="client-row"><div><strong>'+escapeHtml(p.name||"Untitled project")+'</strong><small>Client: '+escapeHtml(p.clientName||"Unknown client")+' • Status: '+escapeHtml(p.status||"Planning")+'</small><small>Deadline: '+escapeHtml(p.deadline||"Not set")+' • Progress: '+escapeHtml(String(p.progress??0))+'%</small><div style="height:8px;background:var(--border);border-radius:20px;overflow:hidden;margin-top:10px"><div style="height:100%;width:'+Math.max(0,Math.min(100,Number(p.progress)||0))+'%;background:linear-gradient(90deg,#6d5dfc,#20c5ef)"></div></div><small>'+escapeHtml(p.description||"No description")+'</small></div></article>').join("");
+}
+async function loadProjects(){
+ projectList.innerHTML='<div class="client-empty">Loading projects…</div>';
+ try{const snap=await get(ref(db,"projects"));const data=snap.exists()?snap.val():{};projectRecords=Object.entries(data).map(([id,p])=>({id,...p}));renderProjects();}
+ catch(error){projectList.innerHTML='<div class="client-empty">Unable to read projects. Database rules must allow admins to read /projects.</div>';console.error("Project load failed",error);}
+}
+refreshProjects.addEventListener("click",loadProjects);
+projectForm.addEventListener("submit",async event=>{
+ event.preventDefault();projectFormStatus.textContent="Saving project…";
+ const client=clients.find(c=>c.uid===projectClient.value);
+ if(!client){projectFormStatus.textContent="Select a client first.";return;}
+ const progress=Number(document.getElementById("projectProgress").value);
+ if(!Number.isFinite(progress)||progress<0||progress>100){projectFormStatus.textContent="Progress must be between 0 and 100.";return;}
+ const record={name:document.getElementById("projectName").value.trim(),clientUid:client.uid,clientName:client.name,clientEmail:client.email,description:document.getElementById("projectDescription").value.trim(),status:document.getElementById("projectStatus").value,progress,deadline:document.getElementById("projectDeadline").value||"",createdAt:Date.now(),createdBy:auth.currentUser.uid};
+ try{await set(push(ref(db,"projects")),record);projectForm.reset();document.getElementById("projectProgress").value="0";projectFormStatus.textContent="Project created successfully.";await loadProjects();}
+ catch(error){console.error(error);projectFormStatus.textContent="Save blocked. Check Realtime Database rules for admin write access to /projects.";}
+});
+\nonAuthStateChanged(auth,async(user)=>{
  if(!user){window.location.replace("account.html");return;}
  if(!user.emailVerified){showStatus("Email verification is required. Redirecting…");window.location.replace("account.html");return;}
  try{
