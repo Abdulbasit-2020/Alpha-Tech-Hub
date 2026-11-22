@@ -34,7 +34,16 @@
 </header>
 <main class="dashboard-wrap">
 <div class="container">
-<div id="dashboardStatus" class="dash-status" role="status" aria-live="polite">Checking your account…</div>
+<div id="dashboardStatus" class="dash-status" role="status" aria-live="polite">Starting diagnostics…</div>
+<article class="dash-card" style="margin-bottom:24px">
+<h2>Connection Diagnostics</h2>
+<div id="firebaseDiag" style="display:grid;gap:10px">
+<p>Firebase SDK: <strong id="diagSdk">Waiting…</strong></p>
+<p>Authentication: <strong id="diagAuth">Waiting…</strong></p>
+<p>Realtime Database connection: <strong id="diagDb">Waiting…</strong></p>
+<p>User profile: <strong id="diagProfile">Waiting…</strong></p>
+</div>
+</article>
 <section class="dash-head">
 <div><span class="section-label">PERSONAL DASHBOARD</span><h1>Welcome, <span id="userName" class="gradient-text">Member</span></h1><p>Your Alpha Tech Hub account overview.</p></div>
 </section>
@@ -47,6 +56,6 @@
 </div>
 </main>
 <script type="module" src="dashboard.js"></script>
-<script>window.addEventListener("error",function(e){const b=document.getElementById("dashboardStatus");if(b){b.textContent="Dashboard script error: "+(e.message||"Could not load JavaScript.");b.className="dash-status error";}});window.addEventListener("unhandledrejection",function(e){const b=document.getElementById("dashboardStatus");if(b){b.textContent="Dashboard startup failed: "+(e.reason?.message||e.reason||"Unknown error");b.className="dash-status error";}});setTimeout(function(){const b=document.getElementById("dashboardStatus");if(b&&b.textContent.includes("Checking your account")){b.textContent="Firebase is taking too long to respond. Check your internet connection and reload.";b.className="dash-status error";}},12000);</script>
+<script>window.addEventListener("error",function(e){const b=document.getElementById("dashboardStatus");if(b){b.textContent="Dashboard script error: "+(e.message||"Could not load JavaScript.");b.className="dash-status error";}});window.addEventListener("unhandledrejection",function(e){const b=document.getElementById("dashboardStatus");if(b){b.textContent="Dashboard startup failed: "+(e.reason?.message||e.reason||"Unknown error");b.className="dash-status error";}});setTimeout(function(){const b=document.getElementById("dashboardStatus");if(b&&/Starting diagnostics|Checking your account/.test(b.textContent)){b.textContent="Dashboard JavaScript did not finish starting. Check whether the Firebase SDK or script is blocked.";b.className="dash-status error";}},15000);</script>
 </body>
 </html>
