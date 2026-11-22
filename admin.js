@@ -95,7 +95,8 @@ projectForm.addEventListener("submit",async event=>{
  try{await set(push(ref(db,"projects")),record);projectForm.reset();document.getElementById("projectProgress").value="0";projectFormStatus.textContent="Project created successfully.";await loadProjects();}
  catch(error){console.error(error);projectFormStatus.textContent="Save blocked. Check Realtime Database rules for admin write access to /projects.";}
 });
-\nonAuthStateChanged(auth,async(user)=>{
+
+onAuthStateChanged(auth,async(user)=>{
  if(!user){window.location.replace("account.html");return;}
  if(!user.emailVerified){showStatus("Email verification is required. Redirecting…");window.location.replace("account.html");return;}
  try{
