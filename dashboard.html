@@ -47,5 +47,6 @@
 </div>
 </main>
 <script type="module" src="dashboard.js"></script>
+<script>window.addEventListener("error",function(e){const b=document.getElementById("dashboardStatus");if(b){b.textContent="Dashboard script error: "+(e.message||"Could not load JavaScript.");b.className="dash-status error";}});window.addEventListener("unhandledrejection",function(e){const b=document.getElementById("dashboardStatus");if(b){b.textContent="Dashboard startup failed: "+(e.reason?.message||e.reason||"Unknown error");b.className="dash-status error";}});setTimeout(function(){const b=document.getElementById("dashboardStatus");if(b&&b.textContent.includes("Checking your account")){b.textContent="Firebase is taking too long to respond. Check your internet connection and reload.";b.className="dash-status error";}},12000);</script>
 </body>
 </html>
