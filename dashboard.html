@@ -42,6 +42,7 @@
 <p>Authentication: <strong id="diagAuth">Waiting…</strong></p>
 <p>Realtime Database connection: <strong id="diagDb">Waiting…</strong></p>
 <p>User profile: <strong id="diagProfile">Waiting…</strong></p>
+<p id="diagNetworkDetails" style="font-size:12px;overflow-wrap:anywhere;margin-top:12px;color:var(--muted)"></p>
 </div>
 </article>
 <section class="dash-head">
@@ -55,6 +56,34 @@
 </div>
 </div>
 </main>
+<script>
+(function(){
+ const status=document.getElementById("dashboardStatus");
+ const sdk=document.getElementById("diagSdk"), auth=document.getElementById("diagAuth"), db=document.getElementById("diagDb"), profile=document.getElementById("diagProfile");
+ function set(el,msg,color){el.textContent=msg;if(color)el.style.color=color;}
+ async function check(url,label){
+   try{const res=await fetch(url,{method:"GET",cache:"no-store"});return label+" reachable (HTTP "+res.status+")";}
+   catch(e){return label+" FAILED: "+(e.message||e);}
+ }
+ set(status,"Running independent browser/network checks…");
+ set(auth,"Auth module hasn't started yet","#ffb86b");
+ set(profile,"Waiting for dashboard module","#ffb86b");
+ Promise.all([
+   check("./dashboard.js","Dashboard JS"),
+   check("./firebase.js","Firebase config JS"),
+   check("https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js","Firebase CDN"),
+   check("https://alpha-tech-hub-8d863-default-rtdb.firebaseio.com/.json","Realtime Database endpoint")
+ ]).then(results=>{
+   set(sdk,results[2],results[2].includes("FAILED")?"#ff8a8a":"#63e7b1");
+   set(db,results[3],results[3].includes("FAILED")?"#ff8a8a":"#ffb86b");
+   status.textContent="Network checks finished. Review each result below.";
+   status.className="dash-status";
+   const networkLines=results.slice(0,2).join(" | ");
+   const detail=document.getElementById("diagNetworkDetails");
+   if(detail)detail.textContent=networkLines;
+ }).catch(e=>{status.textContent="Diagnostic check failed: "+e.message;status.className="dash-status error";});
+})();
+</script>
 <script type="module" src="dashboard.js"></script>
 <script>window.addEventListener("error",function(e){const b=document.getElementById("dashboardStatus");if(b){b.textContent="Dashboard script error: "+(e.message||"Could not load JavaScript.");b.className="dash-status error";}});window.addEventListener("unhandledrejection",function(e){const b=document.getElementById("dashboardStatus");if(b){b.textContent="Dashboard startup failed: "+(e.reason?.message||e.reason||"Unknown error");b.className="dash-status error";}});setTimeout(function(){const b=document.getElementById("dashboardStatus");if(b&&/Starting diagnostics|Checking your account/.test(b.textContent)){b.textContent="Dashboard JavaScript did not finish starting. Check whether the Firebase SDK or script is blocked.";b.className="dash-status error";}},15000);</script>
 </body>
