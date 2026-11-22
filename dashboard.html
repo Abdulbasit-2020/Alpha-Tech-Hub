@@ -48,6 +48,15 @@
 <section class="dash-head">
 <div><span class="section-label">PERSONAL DASHBOARD</span><h1>Welcome, <span id="userName" class="gradient-text">Member</span></h1><p>Your Alpha Tech Hub account overview.</p></div>
 </section>
+<article id="profileRecovery" class="dash-card" style="display:none;margin-bottom:22px;border-color:#f0b35a">
+<h2>Complete your account profile</h2>
+<p>Your account exists, but its profile record was not saved previously. Add your name to restore your profile.</p>
+<form id="profileRecoveryForm">
+<label for="recoveryName">Full name</label>
+<input id="recoveryName" type="text" autocomplete="name" maxlength="100" required style="width:100%;margin:10px 0;padding:14px;border-radius:10px">
+<button id="saveRecoveryProfile" class="btn btn-primary" type="submit">Save profile</button>
+</form>
+</article>
 <div class="dash-grid">
 <article class="dash-card"><h2>Account profile</h2><p>Name</p><p class="dash-value" id="profileName">—</p><p style="margin-top:12px">Email</p><p class="dash-value" id="profileEmail">—</p></article>
 <article class="dash-card"><h2>Account security</h2><p>Email verification status</p><p class="dash-value" id="verificationStatus">Checking…</p><div class="dash-actions"><button id="resendVerification" class="btn btn-outline" type="button" hidden>Resend verification</button></div></article>
@@ -72,7 +81,7 @@
    check("./dashboard.js","Dashboard JS"),
    check("./firebase.js","Firebase config JS"),
    check("https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js","Firebase CDN"),
-   check("https://alpha-tech-hub-8d863-default-rtdb.firebaseio.com/.json","Realtime Database endpoint")
+   check("https://alpha-tech-hub-8d863-default-rtdb.europe-west1.firebasedatabase.app/.json","Realtime Database endpoint")
  ]).then(results=>{
    set(sdk,results[2],results[2].includes("FAILED")?"#ff8a8a":"#63e7b1");
    set(db,results[3],results[3].includes("FAILED")?"#ff8a8a":"#ffb86b");
