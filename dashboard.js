@@ -1,6 +1,6 @@
 import { auth, db } from "./firebase.js";
-import { onAuthStateChanged, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-import { ref, get, onValue } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+import { onAuthStateChanged, signOut, sendEmailVerification, updateProfile } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
 
 const statusBox=document.getElementById("dashboardStatus");
 const userName=document.getElementById("userName");
@@ -13,6 +13,11 @@ const diagSdk=document.getElementById("diagSdk");
 const diagAuth=document.getElementById("diagAuth");
 const diagDb=document.getElementById("diagDb");
 const diagProfile=document.getElementById("diagProfile");
+const recoveryCard=document.getElementById("profileRecovery");
+const recoveryForm=document.getElementById("profileRecoveryForm");
+const recoveryName=document.getElementById("recoveryName");
+const saveRecoveryProfile=document.getElementById("saveRecoveryProfile");
+let currentUser=null;
 
 function showStatus(text,type=""){statusBox.textContent=text;statusBox.className="dash-status"+(type?" "+type:"");}
 function diagnostic(el,text,color){el.textContent=text;if(color)el.style.color=color;}
@@ -20,6 +25,10 @@ function showProfile(name,email){
   userName.textContent=name||"Member";
   profileName.textContent=name||"Name not found in profile";
   profileEmail.textContent=email||"Email not available";
+}
+function showRecovery(name=""){
+  recoveryCard.style.display="block";
+  recoveryName.value=name;
 }
 diagnostic(diagSdk,"Loaded ✓","#63e7b1");
 showStatus("Firebase modules loaded. Checking authentication…");
@@ -37,45 +46,66 @@ resendButton.addEventListener("click",async()=>{
   finally{resendButton.disabled=false;}
 });
 
-// RTDB connectivity indicator uses Firebase's reserved connection-status path.
+recoveryForm.addEventListener("submit",async(event)=>{
+  event.preventDefault();
+  if(!currentUser)return;
+  const name=recoveryName.value.trim();
+  if(!name){showStatus("Please enter your full name.","error");return;}
+  saveRecoveryProfile.disabled=true;
+  showStatus("Saving your profile to Firebase Realtime Database…");
+  const profile={
+    uid:currentUser.uid,
+    fullName:name,
+    email:currentUser.email||"",
+    createdAt:currentUser.metadata.creationTime?new Date(currentUser.metadata.creationTime).getTime():Date.now(),
+    emailVerified:currentUser.emailVerified,
+    profileRecoveredAt:Date.now()
+  };
+  try{
+    await set(ref(db,"users/"+currentUser.uid),profile);
+    try{await updateProfile(currentUser,{displayName:name});}catch(profileUpdateError){console.warn("Auth display-name update failed:",profileUpdateError);}
+    showProfile(name,profile.email);
+    recoveryCard.style.display="none";
+    diagnostic(diagProfile,"Profile created ✓","#63e7b1");
+    showStatus("Your profile was successfully saved to Realtime Database.","success");
+  }catch(error){
+    diagnostic(diagProfile,"Profile save failed: "+error.message,"#ff8a8a");
+    showStatus("Could not save profile. Check database rules and connection: "+error.message,"error");
+  }finally{saveRecoveryProfile.disabled=false;}
+});
+
+// Realtime Database connection status
 try{
   onValue(ref(db,".info/connected"),snap=>{
     diagnostic(diagDb,snap.val()===true?"Connected ✓":"Disconnected",snap.val()===true?"#63e7b1":"#ff8a8a");
-  },error=>{
-    diagnostic(diagDb,"Connection listener failed: "+error.message,"#ff8a8a");
-  });
-}catch(error){
-  diagnostic(diagDb,"Could not start: "+error.message,"#ff8a8a");
-}
+  },error=>diagnostic(diagDb,"Connection listener failed: "+error.message,"#ff8a8a"));
+}catch(error){diagnostic(diagDb,"Could not start: "+error.message,"#ff8a8a");}
 
 onAuthStateChanged(auth,async(user)=>{
-  if(!user){
-    diagnostic(diagAuth,"No signed-in user","#ff8a8a");
-    showStatus("No active session. Redirecting to sign-in…","error");
-    window.setTimeout(()=>window.location.replace("account.html"),900);
-    return;
-  }
+  if(!user){diagnostic(diagAuth,"No signed-in user","#ff8a8a");showStatus("No active session. Redirecting to sign-in…","error");setTimeout(()=>window.location.replace("account.html"),900);return;}
+  currentUser=user;
   diagnostic(diagAuth,"Signed in ✓","#63e7b1");
   verificationStatus.textContent=user.emailVerified?"Verified ✓":"Not verified";
   resendButton.hidden=user.emailVerified;
   showStatus("Authentication succeeded. Checking your Realtime Database profile…");
   try{
-    const profilePromise=get(ref(db,"users/"+user.uid));
-    const timeoutPromise=new Promise((_,reject)=>setTimeout(()=>reject(new Error("Profile read timed out after 10 seconds. Database may be unreachable or rules may block access.")),10000));
-    const snap=await Promise.race([profilePromise,timeoutPromise]);
+    const snap=await get(ref(db,"users/"+user.uid));
     if(snap.exists()){
       const profile=snap.val()||{};
-      showProfile(profile.fullName||user.displayName||"",profile.email||user.email||"");
-      diagnostic(diagProfile,"Found ✓","#63e7b1");
-      showStatus(user.emailVerified?"Profile loaded from Realtime Database.":"Profile loaded, but verify your email.","success");
+      const name=profile.fullName||user.displayName||"";
+      showProfile(name,profile.email||user.email||"");
+      if(!name)showRecovery(name);
+      diagnostic(diagProfile,name?"Found ✓":"Profile exists, but name is missing",name?"#63e7b1":"#ffb86b");
+      showStatus("Profile loaded from Realtime Database.","success");
     }else{
       showProfile(user.displayName||"",user.email||"");
-      diagnostic(diagProfile,"Record not found at /users/"+user.uid,"#ffb86b");
-      showStatus("Firebase connected, but this account has no profile record at the expected path.","error");
+      showRecovery(user.displayName||"");
+      diagnostic(diagProfile,"Missing. This account's profile record was not saved previously.","#ffb86b");
+      showStatus("Your account exists, but its profile record is missing. Complete the form below to restore it.","error");
     }
   }catch(error){
     showProfile(user.displayName||"",user.email||"");
     diagnostic(diagProfile,"Read failed: "+error.message,"#ff8a8a");
-    showStatus("Profile lookup failed. See the diagnostics above for the exact failure.","error");
+    showStatus("Profile lookup failed. Check the database connection and /users/"+user.uid+" rules. "+error.message,"error");
   }
 });
