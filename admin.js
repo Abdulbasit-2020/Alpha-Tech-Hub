@@ -111,6 +111,34 @@ projectForm.addEventListener("submit",async event=>{
  catch(error){console.error(error);projectFormStatus.textContent="Save blocked. Check Realtime Database rules for admin write access to /projects.";}
 });
 
+// Orders & service request management
+const requestList=document.getElementById("requestList"),requestSearch=document.getElementById("requestSearch"),requestStatusFilter=document.getElementById("requestStatusFilter"),requestStatusMessage=document.getElementById("requestStatus"),refreshRequests=document.getElementById("refreshRequests");
+let serviceRequests=[];
+function renderRequests(){
+ const q=requestSearch.value.trim().toLowerCase(),filter=requestStatusFilter.value;
+ const filtered=serviceRequests.filter(r=>[r.name,r.email,r.service,r.message].join(" ").toLowerCase().includes(q)&&(!filter||r.status===filter));
+ if(!filtered.length){requestList.innerHTML='<div class="client-empty">'+(serviceRequests.length?'No matching requests.':'No service requests submitted yet.')+'</div>';return;}
+ requestList.innerHTML=filtered.map(r=>'<article class="client-row"><div style="flex:1;min-width:220px"><strong>'+escapeHtml(r.name||"Unnamed requester")+'</strong><small>'+escapeHtml(r.email||"No email")+' • '+escapeHtml(r.service||"Other project")+'</small><small>Budget: '+escapeHtml(r.budget||"Not specified")+' • Submitted: '+escapeHtml(r.createdAt?new Date(r.createdAt).toLocaleString():"Unknown")+'</small><p style="white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0">'+escapeHtml(r.message||"No details")+'</p><small>Status: <strong>'+escapeHtml(r.status||"New")+'</strong> • Quote: '+escapeHtml(r.quote||"Not set")+'</small><small>Admin notes: '+escapeHtml(r.adminNotes||"None")+'</small></div><button class="btn btn-outline request-edit" type="button" data-request-id="'+escapeHtml(r.id)+'">Review / Update</button></article>').join("");
+}
+async function loadRequests(){
+ requestList.innerHTML='<div class="client-empty">Loading service requests…</div>';
+ try{const snap=await get(ref(db,"serviceRequests"));const data=snap.exists()?snap.val():{};serviceRequests=Object.entries(data).map(([id,r])=>({id,...r})).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));renderRequests();}
+ catch(error){console.error("Requests loading failed",error);requestList.innerHTML='<div class="client-empty">Cannot read requests. Check database rules for admin read access to /serviceRequests.</div>';}
+}
+requestList.addEventListener("click",async event=>{
+ const button=event.target.closest(".request-edit");if(!button)return;
+ const r=serviceRequests.find(item=>item.id===button.dataset.requestId);if(!r)return;
+ const allowed=["New","Reviewing","Quoted","Accepted","In progress","Completed","Rejected"];
+ const statusValue=prompt("Request status (New, Reviewing, Quoted, Accepted, In progress, Completed, Rejected):",r.status||"New");if(statusValue===null)return;
+ if(!allowed.includes(statusValue)){requestStatusMessage.textContent="Invalid status. Choose one of the listed status values.";return;}
+ const quote=prompt("Estimated quote / price:",r.quote||"");if(quote===null)return;
+ const notes=prompt("Private admin notes:",r.adminNotes||"");if(notes===null)return;
+ requestStatusMessage.textContent="Updating request…";
+ try{await update(ref(db,"serviceRequests/"+r.id),{status:statusValue,quote:quote.trim(),adminNotes:notes.trim(),updatedAt:Date.now(),updatedBy:auth.currentUser.uid});requestStatusMessage.textContent="Request updated.";await loadRequests();}
+ catch(error){console.error(error);requestStatusMessage.textContent="Update blocked. Check admin write access to /serviceRequests.";}
+});
+requestSearch.addEventListener("input",renderRequests);requestStatusFilter.addEventListener("change",renderRequests);refreshRequests.addEventListener("click",loadRequests);
+
 onAuthStateChanged(auth,async(user)=>{
  if(!user){window.location.replace("account.html");return;}
  if(!user.emailVerified){showStatus("Email verification is required. Redirecting…");window.location.replace("account.html");return;}
@@ -122,5 +150,6 @@ onAuthStateChanged(auth,async(user)=>{
   adminName.textContent=name;
   showStatus("Administrator access confirmed. Welcome to your management workspace.");
   await loadClients();
+  await loadRequests();
  }catch(error){showStatus("Unable to verify administrator permissions. Access denied.");setTimeout(()=>window.location.replace("dashboard.html"),1500);}
 });
