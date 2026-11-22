@@ -3,44 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Admin Console | Alpha Tech Hub</title>
+<title>Alpha Tech Hub | Administration</title>
 <link rel="stylesheet" href="style.css">
 <style>
-.admin-main{padding:48px 0 80px}
-.admin-banner{border:1px solid var(--border);border-radius:14px;padding:15px;margin-bottom:24px;color:var(--muted)}
-.admin-title{margin-bottom:28px}
-.admin-title h1{font-size:clamp(30px,5vw,44px);margin:8px 0}
-.admin-title p{color:var(--muted)}
+.admin-main{padding:38px 0 80px}.admin-top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:26px}
+.admin-identity{color:var(--muted);font-size:14px}.admin-title{margin:12px 0 26px}.admin-title h1{font-size:clamp(30px,5vw,46px);margin:8px 0}.admin-title p{color:var(--muted)}
+.admin-status{padding:14px 16px;border:1px solid var(--border);border-radius:12px;color:var(--muted);margin-bottom:24px}
+.admin-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:24px}
+.admin-stat,.admin-card{padding:22px;border:1px solid var(--border);border-radius:18px;background:var(--card)}
+.admin-stat small{color:var(--muted)}.admin-stat strong{display:block;font-size:28px;margin-top:8px}
 .admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.admin-card{padding:24px;border:1px solid var(--border);border-radius:18px;background:var(--card)}
-.admin-card h2{font-size:18px;margin-bottom:8px}
-.admin-card p{color:var(--muted);font-size:14px}
-.admin-card .status{display:inline-block;margin-top:12px;padding:6px 10px;border-radius:20px;border:1px solid var(--border);font-size:12px;color:#91aaff}
-.admin-controls{display:flex;gap:10px;flex-wrap:wrap}
-@media(max-width:620px){.admin-grid{grid-template-columns:1fr}.admin-card{padding:20px}}
+.admin-card h2{font-size:18px;margin-bottom:8px}.admin-card p{color:var(--muted);font-size:14px}.admin-card .status{display:inline-block;margin-top:12px;padding:6px 10px;border-radius:20px;border:1px solid var(--border);font-size:12px;color:#91aaff}
+@media(max-width:620px){.admin-stats{grid-template-columns:1fr}.admin-grid{grid-template-columns:1fr}.admin-stat,.admin-card{padding:19px}}
 </style>
 </head>
 <body>
 <header class="site-header">
 <div class="container navbar">
-<a href="index.html" class="brand"><span class="brand-icon">A</span><span class="brand-text"><strong>Alpha Tech Hub</strong><small>ADMIN CONSOLE</small></span></a>
-<div class="admin-controls"><a href="dashboard.html" class="btn btn-outline">User dashboard</a><button id="adminLogout" class="btn btn-outline" type="button">Sign out</button></div>
+<a href="index.html" class="brand"><span class="brand-icon">A</span><span class="brand-text"><strong>Alpha Tech Hub</strong><small>ADMINISTRATION</small></span></a>
+<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><a href="index.html" class="btn btn-outline">Website</a><button id="adminLogout" class="btn btn-outline" type="button">Sign out</button></div>
 </div>
 </header>
-<main class="admin-main">
-<div class="container">
-<div id="adminStatus" class="admin-banner" role="status" aria-live="polite">Checking administrator access…</div>
-<section class="admin-title"><span class="section-label">PRIVATE ADMINISTRATION</span><h1>Admin <span class="gradient-text">Console</span></h1><p>Central management workspace for Alpha Tech Hub.</p></section>
+<main class="admin-main"><div class="container">
+<div class="admin-top"><div><span class="section-label">ADMIN WORKSPACE</span><h1 style="margin:8px 0 0">Control <span class="gradient-text">Center</span></h1></div><div class="admin-identity">Administrator: <strong id="adminName">Loading…</strong></div></div>
+<div id="adminStatus" class="admin-status" role="status" aria-live="polite">Verifying administrator access…</div>
+<section class="admin-stats">
+<div class="admin-stat"><small>Clients</small><strong>—</strong><small>Records coming soon</small></div>
+<div class="admin-stat"><small>Active projects</small><strong>—</strong><small>Project module pending</small></div>
+<div class="admin-stat"><small>New requests</small><strong>—</strong><small>Order module pending</small></div>
+</section>
+<h2 style="margin:0 0 16px">Management modules</h2>
 <div class="admin-grid">
-<article class="admin-card"><h2>Clients</h2><p>Review client profiles and account activity.</p><span class="status">Module pending</span></article>
-<article class="admin-card"><h2>Projects</h2><p>Create projects, assign milestones, and update progress.</p><span class="status">Module pending</span></article>
-<article class="admin-card"><h2>Orders & Requests</h2><p>Review new website and service requests.</p><span class="status">Module pending</span></article>
-<article class="admin-card"><h2>Messages</h2><p>Manage incoming inquiries and client communication.</p><span class="status">Module pending</span></article>
-<article class="admin-card"><h2>Files</h2><p>Manage project files and client deliverables.</p><span class="status">Module pending</span></article>
-<article class="admin-card"><h2>Platform settings</h2><p>Review site settings, service information, and admin permissions.</p><span class="status">Module pending</span></article>
-</div>
-</div>
-</main>
+<article class="admin-card"><h2>👥 Client Management</h2><p>Review client profiles, account details, and activity.</p><span class="status">Coming soon</span></article>
+<article class="admin-card"><h2>💻 Project Management</h2><p>Create projects, set milestones, assign status, and track progress.</p><span class="status">Coming soon</span></article>
+<article class="admin-card"><h2>📋 Orders & Requests</h2><p>Review website development and service requests from prospective clients.</p><span class="status">Coming soon</span></article>
+<article class="admin-card"><h2>✉️ Messages</h2><p>View inquiries and manage client communication.</p><span class="status">Coming soon</span></article>
+<article class="admin-card"><h2>📁 Files & Deliverables</h2><p>Organize project files and share completed deliverables.</p><span class="status">Coming soon</span></article>
+<article class="admin-card"><h2>⚙️ Platform Settings</h2><p>Manage platform information and administrator settings.</p><span class="status">Coming soon</span></article>
+</div></div></main>
 <script type="module" src="admin.js"></script>
-</body>
-</html>
+</body></html>
