@@ -188,9 +188,7 @@
                     <h2>Tell Us About Your Idea</h2>
 
                     <p class="form-description">
-                        Complete the form below. When you submit it,
-                        WhatsApp will open with your project details
-                        ready to send.
+                        Complete the form below to submit your request directly to Alpha Tech Hub.
                     </p>
 
 
@@ -324,15 +322,11 @@
                             type="submit"
                             class="btn btn-primary contact-submit"
                         >
-                            Send Enquiry via WhatsApp ↗
+                            Submit Project Enquiry
                         </button>
 
                         <p class="form-privacy-note">
-                            Your form details are placed into a
-                            WhatsApp message. Nothing is stored
-                            or sent automatically by this website.
-                            You will review and send the message
-                            in WhatsApp yourself.
+                            Your enquiry is submitted to our request system for review. We will contact you to discuss next steps.
                         </p>
 
                     </form>
@@ -482,7 +476,7 @@
 
 
     <!-- JAVASCRIPT -->
-    <script>
+    <script type="module">
         const menuToggle = document.getElementById("menuToggle");
         const navLinks = document.getElementById("navLinks");
 
@@ -517,47 +511,18 @@
             new Date().getFullYear();
 
 
-        // Prepare a project enquiry for WhatsApp
+        // Submit project enquiry to Firebase
+        import { db } from "./firebase.js";
+        import { ref, push, set } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
         const contactForm = document.getElementById("contactForm");
         const formStatus = document.getElementById("formStatus");
-
-        contactForm.addEventListener("submit", function (event) {
-            event.preventDefault();
-
-            if (!contactForm.reportValidity()) {
-                return;
-            }
-
-            const name = document.getElementById("name").value.trim();
-            const email = document.getElementById("email").value.trim();
-            const service = document.getElementById("service").value;
-            const budget = document.getElementById("budget").value;
-            const message = document.getElementById("message").value.trim();
-
-            const whatsappMessage =
-                "Hello Alpha Tech Hub! I would like to make a project enquiry.\n\n" +
-                "Name: " + name + "\n" +
-                "Email: " + email + "\n" +
-                "Service needed: " + service + "\n" +
-                "Estimated budget: " + budget + "\n\n" +
-                "Project details:\n" + message;
-
-            const whatsappURL =
-                "https://wa.me/2349157775791?text=" +
-                encodeURIComponent(whatsappMessage);
-
-            formStatus.textContent =
-                "Opening WhatsApp with your enquiry. Please review and send your message there.";
-
-            const whatsappWindow = window.open(
-                whatsappURL,
-                "_blank",
-                "noopener,noreferrer"
-            );
-
-            if (!whatsappWindow) {
-                window.location.href = whatsappURL;
-            }
+        contactForm.addEventListener("submit", async function (event) {
+            event.preventDefault(); if (!contactForm.reportValidity()) return;
+            const request={name:document.getElementById("name").value.trim(),email:document.getElementById("email").value.trim(),service:document.getElementById("service").value,budget:document.getElementById("budget").value,message:document.getElementById("message").value.trim(),status:"New",quote:"",adminNotes:"",createdAt:Date.now()};
+            const submitButton=contactForm.querySelector('[type="submit"]');submitButton.disabled=true;formStatus.textContent="Submitting your enquiry…";
+            try{await set(push(ref(db,"serviceRequests")),request);formStatus.textContent="Your enquiry was submitted successfully! Alpha Tech Hub will review it and contact you.";contactForm.reset();}
+            catch(error){console.error("Enquiry submission failed",error);formStatus.textContent="Unable to submit right now. Please contact Alpha Tech Hub through WhatsApp.";}
+            finally{submitButton.disabled=false;}
         });
     </script>
 
