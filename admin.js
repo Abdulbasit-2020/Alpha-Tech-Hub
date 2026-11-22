@@ -1,6 +1,6 @@
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged, signOut, getIdTokenResult } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-import { ref, get, push, set } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+import { ref, get, push, set, update } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
 
 const status=document.getElementById("adminStatus");
 const logout=document.getElementById("adminLogout");
@@ -77,8 +77,23 @@ function updateProjectClientOptions(){
 }
 function renderProjects(){
  if(!projectRecords.length){projectList.innerHTML='<div class="client-empty">No projects found yet.</div>';return;}
- projectList.innerHTML=projectRecords.map(p=>'<article class="client-row"><div><strong>'+escapeHtml(p.name||"Untitled project")+'</strong><small>Client: '+escapeHtml(p.clientName||"Unknown client")+' • Status: '+escapeHtml(p.status||"Planning")+'</small><small>Deadline: '+escapeHtml(p.deadline||"Not set")+' • Progress: '+escapeHtml(String(p.progress??0))+'%</small><div style="height:8px;background:var(--border);border-radius:20px;overflow:hidden;margin-top:10px"><div style="height:100%;width:'+Math.max(0,Math.min(100,Number(p.progress)||0))+'%;background:linear-gradient(90deg,#6d5dfc,#20c5ef)"></div></div><small>'+escapeHtml(p.description||"No description")+'</small></div></article>').join("");
+ projectList.innerHTML=projectRecords.map(p=>'<article class="client-row"><div><strong>'+escapeHtml(p.name||"Untitled project")+'</strong><small>Client: '+escapeHtml(p.clientName||"Unknown client")+' • Status: '+escapeHtml(p.status||"Planning")+'</small><small>Deadline: '+escapeHtml(p.deadline||"Not set")+' • Progress: '+escapeHtml(String(p.progress??0))+'%</small><div style="height:8px;background:var(--border);border-radius:20px;overflow:hidden;margin-top:10px"><div style="height:100%;width:'+Math.max(0,Math.min(100,Number(p.progress)||0))+'%;background:linear-gradient(90deg,#6d5dfc,#20c5ef)"></div></div><small>'+escapeHtml(p.description||"No description")+'</small></div><button class="btn btn-outline project-edit" type="button" data-project-id="'+escapeHtml(p.id)+'">Edit project</button></article>').join("");
 }
+projectList.addEventListener("click",async event=>{
+ const button=event.target.closest(".project-edit");if(!button)return;
+ const p=projectRecords.find(item=>item.id===button.dataset.projectId);if(!p)return;
+ const name=prompt("Project name:",p.name||"");if(name===null)return;
+ const description=prompt("Project description:",p.description||"");if(description===null)return;
+ const statusOptions=["Planning","In progress","On hold","Completed"];
+ const status=prompt("Status (Planning, In progress, On hold, Completed):",p.status||"Planning");if(status===null)return;
+ if(!statusOptions.includes(status)){projectFormStatus.textContent="Invalid status. Use Planning, In progress, On hold, or Completed.";return;}
+ const progressInput=prompt("Progress percentage (0–100):",String(p.progress??0));if(progressInput===null)return;
+ const progress=Number(progressInput);if(!Number.isFinite(progress)||progress<0||progress>100){projectFormStatus.textContent="Progress must be between 0 and 100.";return;}
+ const deadline=prompt("Deadline (YYYY-MM-DD; leave blank to clear):",p.deadline||"");if(deadline===null)return;
+ projectFormStatus.textContent="Updating project…";
+ try{await update(ref(db,"projects/"+p.id),{name:name.trim(),description:description.trim(),status,progress,deadline:deadline.trim()});projectFormStatus.textContent="Project updated successfully.";await loadProjects();}
+ catch(error){console.error(error);projectFormStatus.textContent="Update blocked. Check admin write access to /projects in database rules.";}
+});
 async function loadProjects(){
  projectList.innerHTML='<div class="client-empty">Loading projects…</div>';
  try{const snap=await get(ref(db,"projects"));const data=snap.exists()?snap.val():{};projectRecords=Object.entries(data).map(([id,p])=>({id,...p}));renderProjects();}
