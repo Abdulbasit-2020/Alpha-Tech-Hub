@@ -13,6 +13,9 @@ const totalClients=document.getElementById("totalClients");
 const profileModal=document.getElementById("profileModal");
 const profileFields=document.getElementById("profileFields");
 const closeProfile=document.getElementById("closeProfile");
+const copyClientUid=document.getElementById("copyClientUid");
+const profileCopyStatus=document.getElementById("profileCopyStatus");
+let selectedClientUid="";
 let clients=[];
 function showStatus(message){status.textContent=message;}
 function escapeHtml(value){return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
@@ -47,9 +50,14 @@ clientList.addEventListener("click",event=>{
  const client=clients.find(c=>c.uid===button.dataset.uid);
  if(!client)return;
  const p=client.profile;
+ selectedClientUid=client.uid;
+ profileCopyStatus.textContent="";
  const fields=[["Full name",p.fullName||"Not provided"],["Email",p.email||"Not provided"],["User ID (UID)",client.uid],["Registered",client.createdAt],["Email verification","Not available in the database profile"]];
  profileFields.innerHTML=fields.map(([label,value])=>'<div class="profile-field"><small>'+escapeHtml(label)+'</small><div>'+escapeHtml(value)+'</div></div>').join("");
  profileModal.classList.add("open");
+});
+copyClientUid.addEventListener("click",async()=>{
+ if(!selectedClientUid)return; try{await navigator.clipboard.writeText(selectedClientUid);profileCopyStatus.textContent="UID copied to clipboard.";}catch(error){profileCopyStatus.textContent="Clipboard unavailable. UID: "+selectedClientUid;}
 });
 closeProfile.addEventListener("click",closeModal);
 profileModal.addEventListener("click",event=>{if(event.target===profileModal)closeModal();});
