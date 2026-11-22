@@ -17,6 +17,11 @@
 @media(max-width:620px){.admin-stats{grid-template-columns:1fr}.admin-grid{grid-template-columns:1fr}.admin-stat,.admin-card{padding:19px}}
 
 .client-toolbar{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}.client-toolbar input{flex:1;min-width:180px;padding:12px 14px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text)}.client-list{display:grid;gap:12px}.client-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:16px;border:1px solid var(--border);border-radius:14px;background:var(--card)}.client-row strong{display:block}.client-row small{color:var(--muted)}.client-empty{padding:20px;border:1px dashed var(--border);border-radius:14px;color:var(--muted)}
+.client-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.profile-modal{position:fixed;inset:0;background:rgba(5,10,22,.78);display:none;align-items:center;justify-content:center;padding:18px;z-index:1000}
+.profile-modal.open{display:flex}.profile-box{width:min(100%,560px);max-height:90vh;overflow:auto;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px}
+.profile-box h2{margin:0 0 18px}.profile-fields{display:grid;gap:12px}.profile-field{padding:12px;border:1px solid var(--border);border-radius:10px}
+.profile-field small{display:block;color:var(--muted);margin-bottom:5px}.profile-field div{overflow-wrap:anywhere}.profile-footer{display:flex;justify-content:flex-end;margin-top:18px}
 </style>
 </head>
 <body>
@@ -30,7 +35,7 @@
 <div class="admin-top"><div><span class="section-label">ADMIN WORKSPACE</span><h1 style="margin:8px 0 0">Control <span class="gradient-text">Center</span></h1></div><div class="admin-identity">Administrator: <strong id="adminName">Loading…</strong></div></div>
 <div id="adminStatus" class="admin-status" role="status" aria-live="polite">Verifying administrator access…</div>
 <section class="admin-stats">
-<div class="admin-stat"><small>Clients</small><strong>—</strong><small>Records coming soon</small></div>
+<div class="admin-stat"><small>Clients</small><strong id="totalClients">0</strong><small>Registered accounts</small></div>
 <div class="admin-stat"><small>Active projects</small><strong>—</strong><small>Project module pending</small></div>
 <div class="admin-stat"><small>New requests</small><strong>—</strong><small>Order module pending</small></div>
 </section>
@@ -44,6 +49,9 @@
 <article class="admin-card"><h2>✉️ Messages</h2><p>View inquiries and manage client communication.</p><span class="status">Coming soon</span></article>
 <article class="admin-card"><h2>📁 Files & Deliverables</h2><p>Organize project files and share completed deliverables.</p><span class="status">Coming soon</span></article>
 <article class="admin-card"><h2>⚙️ Platform Settings</h2><p>Manage platform information and administrator settings.</p><span class="status">Coming soon</span></article>
+</div>
+<div id="profileModal" class="profile-modal" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
+<div class="profile-box"><h2 id="profileTitle">Client Profile</h2><div id="profileFields" class="profile-fields"></div><div class="profile-footer"><button id="closeProfile" class="btn btn-outline" type="button">Close</button></div></div></div>
 </div></div></main>
 <script type="module" src="admin.js"></script>
 </body></html>
