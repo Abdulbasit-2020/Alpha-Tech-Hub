@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://abdulbasit-2020.github.io/Alpha-Tech-Hub/sitemap.xml
