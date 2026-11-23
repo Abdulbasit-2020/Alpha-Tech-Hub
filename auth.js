@@ -1,4 +1,4 @@
-import { auth, db } from "./firebase.js";
+import { auth, default as app } from "./firebase.js";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -8,7 +8,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-functions.js";
 
-const functions = getFunctions((await import("./firebase.js")).default, "europe-west1");
+const functions = getFunctions(app, "europe-west1");
 const ensureClientProfile = httpsCallable(functions, "ensureClientProfile");
 
 const form = document.getElementById("authForm");
