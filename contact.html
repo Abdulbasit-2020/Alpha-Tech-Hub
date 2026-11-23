@@ -528,37 +528,39 @@
             new Date().getFullYear();
 
 
-        // Submit project enquiry to Firebase
-        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-functions.js";
-        import app from "./firebase.js";
-        const functions = getFunctions(app, "europe-west1");
-        const submitServiceRequest = httpsCallable(functions, "createServiceRequest");
+        // Save project enquiries directly to Firestore (no Cloud Functions required).
+        import { auth, db } from "./firestore.js";
+        import { addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
         const contactForm = document.getElementById("contactForm");
         const formStatus = document.getElementById("formStatus");
+        let signedInUid = null;
+        onAuthStateChanged(auth, user => { signedInUid = user?.uid || null; });
         contactForm.addEventListener("submit", async function (event) {
             event.preventDefault();
             if (!contactForm.reportValidity()) return;
             const submitButton = contactForm.querySelector('[type="submit"]');
             const payload = {
                 name: document.getElementById("name").value.trim(),
-                email: document.getElementById("email").value.trim(),
+                email: document.getElementById("email").value.trim().toLowerCase(),
                 phone: document.getElementById("phone").value.trim(),
                 service: document.getElementById("service").value,
                 budget: document.getElementById("budget").value,
-                message: document.getElementById("message").value.trim()
+                message: document.getElementById("message").value.trim(),
+                status: "New",
+                createdAt: serverTimestamp(),
+                submittedBy: signedInUid,
+                source: "website"
             };
             submitButton.disabled = true;
-            formStatus.textContent = "Submitting your enquiry securely…";
+            formStatus.textContent = "Submitting your enquiry…";
             try {
-                const result = await submitServiceRequest(payload);
-                if (!result.data || result.data.success !== true) throw new Error("The server did not confirm the request.");
-                formStatus.textContent = "Your enquiry was submitted successfully! Reference: " + result.data.requestId + ". Alpha Tech Hub will contact you.";
+                const result = await addDoc(collection(db, "serviceRequests"), payload);
+                formStatus.textContent = "Your enquiry was submitted successfully! Reference: " + result.id + ". Alpha Tech Hub will contact you.";
                 contactForm.reset();
             } catch (error) {
                 console.error("Enquiry submission failed", error);
-                formStatus.textContent = error.code === "functions/not-found"
-                    ? "The request service is not deployed yet. Please contact us through WhatsApp."
-                    : "Unable to submit right now. Please try again or contact Alpha Tech Hub through WhatsApp.";
+                formStatus.textContent = "Unable to submit right now. Please try again or contact Alpha Tech Hub through WhatsApp.";
             } finally {
                 submitButton.disabled = false;
             }
