@@ -1,155 +1,25 @@
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged, signOut, getIdTokenResult } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 import { ref, get, push, set, update } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
-
-const status=document.getElementById("adminStatus");
-const logout=document.getElementById("adminLogout");
-const adminName=document.getElementById("adminName");
-const clientList=document.getElementById("clientList");
-const clientCount=document.getElementById("clientCount");
-const clientSearch=document.getElementById("clientSearch");
-const refreshClients=document.getElementById("refreshClients");
-const totalClients=document.getElementById("totalClients");
-const profileModal=document.getElementById("profileModal");
-const profileFields=document.getElementById("profileFields");
-const closeProfile=document.getElementById("closeProfile");
-const copyClientUid=document.getElementById("copyClientUid");
-const profileCopyStatus=document.getElementById("profileCopyStatus");
-let selectedClientUid="";
-let clients=[];
-function showStatus(message){status.textContent=message;}
-function escapeHtml(value){return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
-function renderClients(){
- const q=clientSearch.value.trim().toLowerCase();
- const filtered=clients.filter(c=>(c.name+" "+c.email).toLowerCase().includes(q));
- clientCount.textContent=filtered.length+" of "+clients.length+" clients";
- if(!filtered.length){clientList.innerHTML='<div class="client-empty">'+(clients.length?'No matching clients found.':'No registered client profiles found.')+'</div>';return;}
- clientList.innerHTML=filtered.map(c=>'<article class="client-row"><div><strong>'+escapeHtml(c.name)+'</strong><small>'+escapeHtml(c.email)+'</small></div><div class="client-actions"><small>Joined: '+escapeHtml(c.createdAt)+'</small><button class="btn btn-outline profile-view" type="button" data-uid="'+escapeHtml(c.uid)+'">View profile</button></div></article>').join("");
-}
-async function loadClients(){
- clientList.innerHTML='<div class="client-empty">Loading client records…</div>';
- try{
-  const snap=await get(ref(db,"users"));
-  const data=snap.exists()?snap.val():{};
-  clients=Object.entries(data).map(([uid,p])=>({uid,profile:p||{},name:p.fullName||"Unnamed user",email:p.email||"No email",createdAt:p.createdAt?new Date(p.createdAt).toLocaleDateString():"Unknown"}));
-  totalClients.textContent=clients.length;
-  updateProjectClientOptions();
-  renderClients();
-  await loadProjects();
- }catch(error){
-  clientCount.textContent="Unable to load";
-  totalClients.textContent="—";
-  clientList.innerHTML='<div class="client-empty">Client data access is blocked by database rules. Update the Realtime Database rules to allow verified admins to read /users, then refresh.</div>';
-  console.error(error);
- }
-}
-function closeModal(){profileModal.classList.remove("open");}
-clientSearch.addEventListener("input",renderClients);
-refreshClients.addEventListener("click",loadClients);
-clientList.addEventListener("click",event=>{
- const button=event.target.closest(".profile-view");
- if(!button)return;
- const client=clients.find(c=>c.uid===button.dataset.uid);
- if(!client)return;
- const p=client.profile;
- selectedClientUid=client.uid;
- profileCopyStatus.textContent="";
- const fields=[["Full name",p.fullName||"Not provided"],["Email",p.email||"Not provided"],["User ID (UID)",client.uid],["Registered",client.createdAt],["Email verification","Not available in the database profile"]];
- profileFields.innerHTML=fields.map(([label,value])=>'<div class="profile-field"><small>'+escapeHtml(label)+'</small><div>'+escapeHtml(value)+'</div></div>').join("");
- profileModal.classList.add("open");
-});
-copyClientUid.addEventListener("click",async()=>{
- if(!selectedClientUid)return; try{await navigator.clipboard.writeText(selectedClientUid);profileCopyStatus.textContent="UID copied to clipboard.";}catch(error){profileCopyStatus.textContent="Clipboard unavailable. UID: "+selectedClientUid;}
-});
-closeProfile.addEventListener("click",closeModal);
-profileModal.addEventListener("click",event=>{if(event.target===profileModal)closeModal();});
-document.addEventListener("keydown",event=>{if(event.key==="Escape")closeModal();});
-logout.addEventListener("click",async()=>{logout.disabled=true;try{await signOut(auth);window.location.replace("account.html");}catch(error){showStatus("Sign-out failed. Please retry.");logout.disabled=false;}});
-
-const projectForm=document.getElementById("projectForm");
-const projectList=document.getElementById("projectList");
-const projectFormStatus=document.getElementById("projectFormStatus");
-const projectClient=document.getElementById("projectClient");
-const refreshProjects=document.getElementById("refreshProjects");
-let projectRecords=[];
-function updateProjectClientOptions(){
- projectClient.innerHTML='<option value="">Select a client</option>'+clients.map(c=>'<option value="'+escapeHtml(c.uid)+'">'+escapeHtml(c.name)+' — '+escapeHtml(c.email)+'</option>').join("");
-}
-function renderProjects(){
- if(!projectRecords.length){projectList.innerHTML='<div class="client-empty">No projects found yet.</div>';return;}
- projectList.innerHTML=projectRecords.map(p=>'<article class="client-row"><div><strong>'+escapeHtml(p.name||"Untitled project")+'</strong><small>Client: '+escapeHtml(p.clientName||"Unknown client")+' • Status: '+escapeHtml(p.status||"Planning")+'</small><small>Deadline: '+escapeHtml(p.deadline||"Not set")+' • Progress: '+escapeHtml(String(p.progress??0))+'%</small><div style="height:8px;background:var(--border);border-radius:20px;overflow:hidden;margin-top:10px"><div style="height:100%;width:'+Math.max(0,Math.min(100,Number(p.progress)||0))+'%;background:linear-gradient(90deg,#6d5dfc,#20c5ef)"></div></div><small>'+escapeHtml(p.description||"No description")+'</small></div><button class="btn btn-outline project-edit" type="button" data-project-id="'+escapeHtml(p.id)+'">Edit project</button></article>').join("");
-}
-projectList.addEventListener("click",async event=>{
- const button=event.target.closest(".project-edit");if(!button)return;
- const p=projectRecords.find(item=>item.id===button.dataset.projectId);if(!p)return;
- const name=prompt("Project name:",p.name||"");if(name===null)return;
- const description=prompt("Project description:",p.description||"");if(description===null)return;
- const statusOptions=["Planning","In progress","On hold","Completed"];
- const status=prompt("Status (Planning, In progress, On hold, Completed):",p.status||"Planning");if(status===null)return;
- if(!statusOptions.includes(status)){projectFormStatus.textContent="Invalid status. Use Planning, In progress, On hold, or Completed.";return;}
- const progressInput=prompt("Progress percentage (0–100):",String(p.progress??0));if(progressInput===null)return;
- const progress=Number(progressInput);if(!Number.isFinite(progress)||progress<0||progress>100){projectFormStatus.textContent="Progress must be between 0 and 100.";return;}
- const deadline=prompt("Deadline (YYYY-MM-DD; leave blank to clear):",p.deadline||"");if(deadline===null)return;
- projectFormStatus.textContent="Updating project…";
- try{await update(ref(db,"projects/"+p.id),{name:name.trim(),description:description.trim(),status,progress,deadline:deadline.trim()});projectFormStatus.textContent="Project updated successfully.";await loadProjects();}
- catch(error){console.error(error);projectFormStatus.textContent="Update blocked. Check admin write access to /projects in database rules.";}
-});
-async function loadProjects(){
- projectList.innerHTML='<div class="client-empty">Loading projects…</div>';
- try{const snap=await get(ref(db,"projects"));const data=snap.exists()?snap.val():{};projectRecords=Object.entries(data).map(([id,p])=>({id,...p}));renderProjects();}
- catch(error){projectList.innerHTML='<div class="client-empty">Unable to read projects. Database rules must allow admins to read /projects.</div>';console.error("Project load failed",error);}
-}
-refreshProjects.addEventListener("click",loadProjects);
-projectForm.addEventListener("submit",async event=>{
- event.preventDefault();projectFormStatus.textContent="Saving project…";
- const client=clients.find(c=>c.uid===projectClient.value);
- if(!client){projectFormStatus.textContent="Select a client first.";return;}
- const progress=Number(document.getElementById("projectProgress").value);
- if(!Number.isFinite(progress)||progress<0||progress>100){projectFormStatus.textContent="Progress must be between 0 and 100.";return;}
- const record={name:document.getElementById("projectName").value.trim(),clientUid:client.uid,clientName:client.name,clientEmail:client.email,description:document.getElementById("projectDescription").value.trim(),status:document.getElementById("projectStatus").value,progress,deadline:document.getElementById("projectDeadline").value||"",createdAt:Date.now(),createdBy:auth.currentUser.uid};
- try{await set(push(ref(db,"projects")),record);projectForm.reset();document.getElementById("projectProgress").value="0";projectFormStatus.textContent="Project created successfully.";await loadProjects();}
- catch(error){console.error(error);projectFormStatus.textContent="Save blocked. Check Realtime Database rules for admin write access to /projects.";}
-});
-
-// Orders & service request management
-const requestList=document.getElementById("requestList"),requestSearch=document.getElementById("requestSearch"),requestStatusFilter=document.getElementById("requestStatusFilter"),requestStatusMessage=document.getElementById("requestStatus"),refreshRequests=document.getElementById("refreshRequests");
-let serviceRequests=[];
-function renderRequests(){
- const q=requestSearch.value.trim().toLowerCase(),filter=requestStatusFilter.value;
- const filtered=serviceRequests.filter(r=>[r.name,r.email,r.service,r.message].join(" ").toLowerCase().includes(q)&&(!filter||r.status===filter));
- if(!filtered.length){requestList.innerHTML='<div class="client-empty">'+(serviceRequests.length?'No matching requests.':'No service requests submitted yet.')+'</div>';return;}
- requestList.innerHTML=filtered.map(r=>'<article class="client-row"><div style="flex:1;min-width:220px"><strong>'+escapeHtml(r.name||"Unnamed requester")+'</strong><small>'+escapeHtml(r.email||"No email")+' • '+escapeHtml(r.service||"Other project")+'</small><small>Budget: '+escapeHtml(r.budget||"Not specified")+' • Submitted: '+escapeHtml(r.createdAt?new Date(r.createdAt).toLocaleString():"Unknown")+'</small><p style="white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0">'+escapeHtml(r.message||"No details")+'</p><small>Status: <strong>'+escapeHtml(r.status||"New")+'</strong> • Quote: '+escapeHtml(r.quote||"Not set")+'</small><small>Admin notes: '+escapeHtml(r.adminNotes||"None")+'</small></div><button class="btn btn-outline request-edit" type="button" data-request-id="'+escapeHtml(r.id)+'">Review / Update</button></article>').join("");
-}
-async function loadRequests(){
- requestList.innerHTML='<div class="client-empty">Loading service requests…</div>';
- try{const snap=await get(ref(db,"serviceRequests"));const data=snap.exists()?snap.val():{};serviceRequests=Object.entries(data).map(([id,r])=>({id,...r})).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));renderRequests();}
- catch(error){console.error("Requests loading failed",error);requestList.innerHTML='<div class="client-empty">Cannot read requests. Check database rules for admin read access to /serviceRequests.</div>';}
-}
-requestList.addEventListener("click",async event=>{
- const button=event.target.closest(".request-edit");if(!button)return;
- const r=serviceRequests.find(item=>item.id===button.dataset.requestId);if(!r)return;
- const allowed=["New","Reviewing","Quoted","Accepted","In progress","Completed","Rejected"];
- const statusValue=prompt("Request status (New, Reviewing, Quoted, Accepted, In progress, Completed, Rejected):",r.status||"New");if(statusValue===null)return;
- if(!allowed.includes(statusValue)){requestStatusMessage.textContent="Invalid status. Choose one of the listed status values.";return;}
- const quote=prompt("Estimated quote / price:",r.quote||"");if(quote===null)return;
- const notes=prompt("Private admin notes:",r.adminNotes||"");if(notes===null)return;
- requestStatusMessage.textContent="Updating request…";
- try{await update(ref(db,"serviceRequests/"+r.id),{status:statusValue,quote:quote.trim(),adminNotes:notes.trim(),updatedAt:Date.now(),updatedBy:auth.currentUser.uid});requestStatusMessage.textContent="Request updated.";await loadRequests();}
- catch(error){console.error(error);requestStatusMessage.textContent="Update blocked. Check admin write access to /serviceRequests.";}
-});
-requestSearch.addEventListener("input",renderRequests);requestStatusFilter.addEventListener("change",renderRequests);refreshRequests.addEventListener("click",loadRequests);
-
-onAuthStateChanged(auth,async(user)=>{
- if(!user){window.location.replace("account.html");return;}
- if(!user.emailVerified){showStatus("Email verification is required. Redirecting…");window.location.replace("account.html");return;}
- try{
-  const tokenResult=await getIdTokenResult(user,true);
-  if(tokenResult.claims.admin!==true){showStatus("Access denied: administrator privileges are required. Redirecting…");setTimeout(()=>window.location.replace("dashboard.html"),1500);return;}
-  let name=user.displayName||user.email||"Administrator";
-  try{const profileSnap=await get(ref(db,"users/"+user.uid));if(profileSnap.exists())name=profileSnap.val().fullName||name;}catch(e){console.warn("Profile read failed",e);}
-  adminName.textContent=name;
-  showStatus("Administrator access confirmed. Welcome to your management workspace.");
-  await loadClients();
-  await loadRequests();
- }catch(error){showStatus("Unable to verify administrator permissions. Access denied.");setTimeout(()=>window.location.replace("dashboard.html"),1500);}
-});
+const $=id=>document.getElementById(id),status=$("adminStatus"),sections=[...document.querySelectorAll(".ad-section")],nav=[...document.querySelectorAll(".ad-nav button")];
+const titles={overview:"Overview",clients:"Clients",projects:"Projects",requests:"Orders & Requests",messages:"Messages",files:"Files & Deliverables",settings:"Settings"};
+function msg(s){status.textContent=s}function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function openSection(key){sections.forEach(s=>s.classList.toggle("active",s.id===key));nav.forEach(b=>b.classList.toggle("active",b.dataset.section===key));$("pageTitle").textContent=titles[key]||key}
+nav.forEach(b=>b.addEventListener("click",()=>openSection(b.dataset.section)));document.querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click",()=>openSection(b.dataset.goto)));
+$("adminLogout").addEventListener("click",async()=>{try{await signOut(auth);location.replace("account.html")}catch(e){msg("Sign out failed. Try again.")}});
+let clients=[],projects=[],requests=[];
+function renderClients(){const q=$("clientSearch").value.trim().toLowerCase(),filtered=clients.filter(c=>(c.name+" "+c.email).toLowerCase().includes(q));$("clientCount").textContent=filtered.length+" of "+clients.length;$("clientList").innerHTML=filtered.length?filtered.map(c=>'<article class="ad-row"><div><strong>'+esc(c.name)+'</strong><small>'+esc(c.email)+'</small><small>Joined '+esc(c.joined)+'</small></div><button class="ad-btn client-details" data-uid="'+esc(c.uid)+'">View details</button></article>').join(""):'<div class="ad-empty">'+(clients.length?"No matches found.":"No client profiles found.")+"</div>"}
+function clientOptions(){$("projectClient").innerHTML='<option value="">Select a client</option>'+clients.map(c=>'<option value="'+esc(c.uid)+'">'+esc(c.name)+' — '+esc(c.email)+'</option>').join("")}
+async function loadClients(){$("clientList").innerHTML='<div class="ad-empty">Loading…</div>';try{const s=await get(ref(db,"users")),d=s.exists()?s.val():{};clients=Object.entries(d).map(([uid,p])=>({uid,name:p?.fullName||"Unnamed client",email:p?.email||"No email",joined:p?.createdAt?new Date(p.createdAt).toLocaleDateString():"Unknown",profile:p||{}}));$("totalClients").textContent=clients.length;renderClients();clientOptions()}catch(e){console.error(e);$("totalClients").textContent="—";$("clientList").innerHTML='<div class="ad-empty">Client list unavailable. Confirm administrator database read rules for /users.</div>'}}
+$("clientSearch").addEventListener("input",renderClients);$("refreshClients").addEventListener("click",loadClients);
+$("clientList").addEventListener("click",e=>{const b=e.target.closest(".client-details");if(!b)return;const c=clients.find(x=>x.uid===b.dataset.uid);if(c)alert("Client profile\n\nName: "+c.name+"\nEmail: "+c.email+"\nUID: "+c.uid+"\nRegistered: "+c.joined)});
+function renderProjects(){$("projectList").innerHTML=projects.length?projects.map(p=>'<article class="ad-row"><div style="flex:1;min-width:220px"><strong>'+esc(p.name||"Untitled project")+'</strong><small>'+esc(p.clientName||"Unknown client")+' · '+esc(p.status||"Planning")+' · '+esc(p.deadline||"No deadline")+'</small><div class="ad-progress"><span style="width:'+Math.min(100,Math.max(0,Number(p.progress)||0))+'%"></span></div><small>'+esc(p.progress??0)+'% complete — '+esc(p.description||"No description")+'</small></div><button class="ad-btn project-edit" data-id="'+esc(p.id)+'">Edit</button></article>').join(""):'<div class="ad-empty">No projects yet.</div>';$("totalProjects").textContent=projects.length;$("activeProjects").textContent=projects.filter(p=>p.status!=="Completed").length}
+async function loadProjects(){try{const s=await get(ref(db,"projects")),d=s.exists()?s.val():{};projects=Object.entries(d).map(([id,p])=>({id,...p}));renderProjects()}catch(e){console.error(e);$("projectList").innerHTML='<div class="ad-empty">Projects unavailable. Check administrator read rules for /projects.</div>'}}
+$("refreshProjects").addEventListener("click",loadProjects);
+$("projectForm").addEventListener("submit",async e=>{e.preventDefault();$("projectFormStatus").textContent="Saving…";const c=clients.find(x=>x.uid===$("projectClient").value),progress=Number($("projectProgress").value);if(!c){$("projectFormStatus").textContent="Choose a client.";return}if(!Number.isFinite(progress)||progress<0||progress>100){$("projectFormStatus").textContent="Progress must be between 0 and 100.";return}const rec={name:$("projectName").value.trim(),clientUid:c.uid,clientName:c.name,clientEmail:c.email,description:$("projectDescription").value.trim(),status:$("projectStatus").value,progress,deadline:$("projectDeadline").value||"",createdAt:Date.now(),createdBy:auth.currentUser.uid};try{await set(push(ref(db,"projects")),rec);e.target.reset();$("projectProgress").value=0;$("projectFormStatus").textContent="Project created.";await loadProjects()}catch(err){console.error(err);$("projectFormStatus").textContent="Creation denied. Verify Firebase /projects admin write rules."}});
+$("projectList").addEventListener("click",async e=>{const b=e.target.closest(".project-edit");if(!b)return;const p=projects.find(x=>x.id===b.dataset.id);if(!p)return;const name=prompt("Project name:",p.name||"");if(name===null)return;const description=prompt("Description:",p.description||"");if(description===null)return;const s=prompt("Status (Planning, In progress, On hold, Completed):",p.status||"Planning");if(s===null)return;if(!["Planning","In progress","On hold","Completed"].includes(s)){alert("Invalid status.");return}const pr=prompt("Progress 0–100:",p.progress??0);if(pr===null)return;const progress=Number(pr);if(!Number.isFinite(progress)||progress<0||progress>100){alert("Invalid progress.");return}const deadline=prompt("Deadline (YYYY-MM-DD):",p.deadline||"");if(deadline===null)return;try{await update(ref(db,"projects/"+p.id),{name:name.trim(),description:description.trim(),status:s,progress,deadline:deadline.trim()});await loadProjects()}catch(err){console.error(err);alert("Update denied. Check admin write rules.")}});
+function renderRequests(){const q=$("requestSearch").value.toLowerCase().trim(),f=$("requestStatusFilter").value,filtered=requests.filter(r=>[r.name,r.email,r.service,r.message].join(" ").toLowerCase().includes(q)&&(!f||r.status===f));$("requestList").innerHTML=filtered.length?filtered.map(r=>'<article class="ad-row"><div style="flex:1;min-width:220px"><strong>'+esc(r.name||"Unnamed")+'</strong><small>'+esc(r.email||"No email")+' · '+esc(r.service||"Service")+'</small><small>Budget: '+esc(r.budget||"Unspecified")+' · '+esc(r.createdAt?new Date(r.createdAt).toLocaleString():"Unknown")+'</small><p style="white-space:pre-wrap;overflow-wrap:anywhere">'+esc(r.message||"No message")+'</p><small>Status: '+esc(r.status||"New")+' · Quote: '+esc(r.quote||"Not set")+'</small></div><button class="ad-btn request-edit" data-id="'+esc(r.id)+'">Review / edit</button></article>').join(""):'<div class="ad-empty">'+(requests.length?"No matching requests.":"No requests found. Check contact submissions in /serviceRequests.")+"</div>";$("newRequests").textContent=requests.filter(r=>!r.status||r.status==="New").length;const recent=requests.slice(0,4);$("recentRequests").innerHTML=recent.length?recent.map(r=>'<div class="ad-row"><div><strong>'+esc(r.name||"Requester")+'</strong><small>'+esc(r.service||"Service")+' · '+esc(r.status||"New")+'</small></div><button class="ad-btn" data-goto="requests">View</button></div>').join(""):'<div class="ad-empty">No recent requests.</div>'}
+async function loadRequests(){$("requestList").innerHTML='<div class="ad-empty">Loading requests…</div>';try{const s=await get(ref(db,"serviceRequests")),d=s.exists()?s.val():{};requests=Object.entries(d).map(([id,r])=>({id,...r})).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));renderRequests()}catch(e){console.error("Service request read:",e);requests=[];$("requestList").innerHTML='<div class="ad-empty">Read access denied or unavailable for /serviceRequests. Check Firebase admin rules and refresh.</div>';$("newRequests").textContent="—";$("recentRequests").innerHTML='<div class="ad-empty">Could not load requests.</div>'}}
+$("requestSearch").addEventListener("input",renderRequests);$("requestStatusFilter").addEventListener("change",renderRequests);$("refreshRequests").addEventListener("click",loadRequests);
+$("requestList").addEventListener("click",async e=>{const b=e.target.closest(".request-edit");if(!b)return;const r=requests.find(x=>x.id===b.dataset.id);if(!r)return;const statuses=["New","Reviewing","Quoted","Accepted","In progress","Completed","Rejected"],s=prompt("Status: "+statuses.join(", "),r.status||"New");if(s===null)return;if(!statuses.includes(s)){alert("Invalid status.");return}const quote=prompt("Quote:",r.quote||"");if(quote===null)return;const notes=prompt("Private admin notes:",r.adminNotes||"");if(notes===null)return;$("requestStatus").textContent="Updating…";try{await update(ref(db,"serviceRequests/"+r.id),{status:s,quote:quote.trim(),adminNotes:notes.trim(),updatedAt:Date.now(),updatedBy:auth.currentUser.uid});$("requestStatus").textContent="Request updated.";await loadRequests()}catch(err){console.error(err);$("requestStatus").textContent="Update denied. Check Firebase rules."}});
+onAuthStateChanged(auth,async user=>{if(!user){location.replace("account.html");return}if(!user.emailVerified){msg("Email verification required. Redirecting…");location.replace("account.html");return}try{const token=await getIdTokenResult(user,true);if(token.claims.admin!==true){msg("Access denied: administrator privileges required.");location.replace("dashboard.html");return}let name=user.displayName||user.email||"Administrator";try{const p=await get(ref(db,"users/"+user.uid));if(p.exists())name=p.val().fullName||name}catch{}$("adminName").textContent=name;msg("Administrator verified. Secure workspace ready.");await Promise.all([loadClients(),loadProjects(),loadRequests()])}catch(e){console.error(e);msg("Administrator verification failed. Redirecting.");location.replace("dashboard.html")}});
