@@ -1,67 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Alpha Tech Hub | Administration</title>
-<link rel="stylesheet" href="style.css">
-<style>
-.admin-main{padding:38px 0 80px}.admin-top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:26px}
-.admin-identity{color:var(--muted);font-size:14px}.admin-title{margin:12px 0 26px}.admin-title h1{font-size:clamp(30px,5vw,46px);margin:8px 0}.admin-title p{color:var(--muted)}
-.admin-status{padding:14px 16px;border:1px solid var(--border);border-radius:12px;color:var(--muted);margin-bottom:24px}
-.admin-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:24px}
-.admin-stat,.admin-card{padding:22px;border:1px solid var(--border);border-radius:18px;background:var(--card)}
-.admin-stat small{color:var(--muted)}.admin-stat strong{display:block;font-size:28px;margin-top:8px}
-.admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.admin-card h2{font-size:18px;margin-bottom:8px}.admin-card p{color:var(--muted);font-size:14px}.admin-card .status{display:inline-block;margin-top:12px;padding:6px 10px;border-radius:20px;border:1px solid var(--border);font-size:12px;color:#91aaff}
-@media(max-width:620px){.admin-stats{grid-template-columns:1fr}.admin-grid{grid-template-columns:1fr}.admin-stat,.admin-card{padding:19px}}
-
-.client-toolbar{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}.client-toolbar input{flex:1;min-width:180px;padding:12px 14px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text)}.client-list{display:grid;gap:12px}.client-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:16px;border:1px solid var(--border);border-radius:14px;background:var(--card)}.client-row strong{display:block}.client-row small{color:var(--muted)}.client-empty{padding:20px;border:1px dashed var(--border);border-radius:14px;color:var(--muted)}
-.client-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.profile-modal{position:fixed;inset:0;background:rgba(5,10,22,.78);display:none;align-items:center;justify-content:center;padding:18px;z-index:1000}
-.profile-modal.open{display:flex}.profile-box{width:min(100%,560px);max-height:90vh;overflow:auto;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px}
-.profile-box h2{margin:0 0 18px}.profile-fields{display:grid;gap:12px}.profile-field{padding:12px;border:1px solid var(--border);border-radius:10px}
-.profile-field small{display:block;color:var(--muted);margin-bottom:5px}.profile-field div{overflow-wrap:anywhere}.profile-footer{display:flex;justify-content:flex-end;margin-top:18px}
-</style>
-</head>
-<body>
-<header class="site-header">
-<div class="container navbar">
-<a href="index.html" class="brand"><span class="brand-icon">A</span><span class="brand-text"><strong>Alpha Tech Hub</strong><small>ADMINISTRATION</small></span></a>
-<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><a href="index.html" class="btn btn-outline">Website</a><button id="adminLogout" class="btn btn-outline" type="button">Sign out</button></div>
-</div>
-</header>
-<main class="admin-main"><div class="container">
-<div class="admin-top"><div><span class="section-label">ADMIN WORKSPACE</span><h1 style="margin:8px 0 0">Control <span class="gradient-text">Center</span></h1></div><div class="admin-identity">Administrator: <strong id="adminName">Loading…</strong></div></div>
-<div id="adminStatus" class="admin-status" role="status" aria-live="polite">Verifying administrator access…</div>
-<section class="admin-stats">
-<div class="admin-stat"><small>Clients</small><strong id="totalClients">0</strong><small>Registered accounts</small></div>
-<div class="admin-stat"><small>Active projects</small><strong>—</strong><small>Project module pending</small></div>
-<div class="admin-stat"><small>New requests</small><strong>—</strong><small>Order module pending</small></div>
-</section>
-
-<section class="admin-clients" style="margin:30px 0"><div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><div><h2>Client Management</h2><p style="color:var(--muted);margin-top:6px">Registered accounts in Alpha Tech Hub</p></div><button id="refreshClients" class="btn btn-outline" type="button">Refresh list</button></div><div class="client-toolbar"><input id="clientSearch" type="search" placeholder="Search by name or email…" aria-label="Search clients"><span id="clientCount" class="admin-identity">Loading clients…</span></div><div id="clientList" class="client-list"><div class="client-empty">Loading client records…</div></div></section>
-<section id="projectManagement" style="margin:34px 0">
-<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><h2>Project Management</h2><p style="color:var(--muted);margin-top:6px">Create and track client projects.</p></div><button id="refreshProjects" class="btn btn-outline" type="button">Refresh projects</button></div>
-<form id="projectForm" class="admin-card" style="margin:16px 0;display:grid;gap:12px">
-<h3 style="margin:0">Create Project</h3>
-<label>Project name<input id="projectName" required maxlength="120" placeholder="e.g. Business website" style="display:block;width:100%;margin-top:6px;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text)"></label>
-<label>Client<select id="projectClient" required style="display:block;width:100%;margin-top:6px;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text)"><option value="">Select a client</option></select></label>
-<label>Description<textarea id="projectDescription" rows="3" maxlength="1000" placeholder="Project scope and details" style="display:block;width:100%;margin-top:6px;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text)"></textarea></label>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px"><label>Status<select id="projectStatus" style="display:block;width:100%;margin-top:6px;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text)"><option>Planning</option><option>In progress</option><option>On hold</option><option>Completed</option></select></label><label>Progress (%)<input id="projectProgress" type="number" min="0" max="100" value="0" required style="display:block;width:100%;margin-top:6px;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text)"></label><label>Deadline<input id="projectDeadline" type="date" style="display:block;width:100%;margin-top:6px;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text)"></label></div>
-<button class="btn btn-primary" type="submit">Create project</button><p id="projectFormStatus" role="status" aria-live="polite" style="margin:0;color:var(--muted)"></p></form>
-<div id="projectList" class="client-list"><div class="client-empty">Projects will appear here.</div></div></section><section id="requestManagement" style="margin:34px 0"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><h2>Orders & Service Requests</h2><p style="color:var(--muted);margin-top:6px">Review enquiries submitted from the public contact form.</p></div><button id="refreshRequests" class="btn btn-outline" type="button">Refresh requests</button></div><div class="client-toolbar"><input id="requestSearch" type="search" placeholder="Search name, email or service…" aria-label="Search requests"><select id="requestStatusFilter" style="padding:12px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text)"><option value="">All statuses</option><option>New</option><option>Reviewing</option><option>Quoted</option><option>Accepted</option><option>In progress</option><option>Completed</option><option>Rejected</option></select></div><div id="requestList" class="client-list"><div class="client-empty">Requests will appear here.</div></div><p id="requestStatus" role="status" aria-live="polite" style="color:var(--muted)"></p></section>
-<h2 style="margin:0 0 16px">Management modules</h2>
-<div class="admin-grid">
-<article class="admin-card"><h2>👥 Client Management</h2><p>Review client profiles, account details, and activity.</p><span class="status">Coming soon</span></article>
-<article class="admin-card"><h2>💻 Project Management</h2><p>Create projects, set milestones, assign status, and track progress.</p><span class="status">Coming soon</span></article>
-<article class="admin-card"><h2>📋 Orders & Requests</h2><p>Review website development and service requests from prospective clients.</p><span class="status">Coming soon</span></article>
-<article class="admin-card"><h2>✉️ Messages</h2><p>View inquiries and manage client communication.</p><span class="status">Coming soon</span></article>
-<article class="admin-card"><h2>📁 Files & Deliverables</h2><p>Organize project files and share completed deliverables.</p><span class="status">Coming soon</span></article>
-<article class="admin-card"><h2>⚙️ Platform Settings</h2><p>Manage platform information and administrator settings.</p><span class="status">Coming soon</span></article>
-</div>
-<div id="profileModal" class="profile-modal" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
-<div class="profile-box"><h2 id="profileTitle">Client Profile</h2><div id="profileFields" class="profile-fields"></div><div id="profileCopyStatus" class="admin-identity" role="status" aria-live="polite" style="margin-right:auto"></div><div class="profile-footer" style="gap:10px;flex-wrap:wrap"><button id="copyClientUid" class="btn btn-outline" type="button">Copy UID</button><button id="closeProfile" class="btn btn-outline" type="button">Close</button></div></div></div>
-</div></div></main>
-<script type="module" src="admin.js"></script>
-</body></html>
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Alpha Tech Hub | Admin</title><link rel="stylesheet" href="admin.css"></head>
+<body><div class="admin-shell">
+<aside class="admin-sidebar"><div class="ad-brand"><div class="ad-logo">A</div><div><strong>Alpha Tech Hub</strong><small>ADMIN WORKSPACE</small></div></div>
+<nav class="ad-nav" aria-label="Admin navigation"><button class="active" data-section="overview">◫ Overview</button><button data-section="clients">♙ Clients</button><button data-section="projects">▣ Projects</button><button data-section="requests">▤ Orders & Requests</button><button data-section="messages">✉ Messages</button><button data-section="files">▧ Files</button><button data-section="settings">⚙ Settings</button></nav>
+<div class="ad-sidebar-bottom"><a class="ad-btn" href="index.html">← View Website</a><button id="adminLogout" class="ad-btn">Sign out</button></div></aside>
+<main class="ad-main"><header class="ad-topbar"><div class="ad-welcome"><span class="ad-label">SECURE ADMIN AREA</span><h1 id="pageTitle">Overview</h1><p id="adminStatus" role="status">Verifying administrator access…</p></div><div class="ad-user">Signed in as <strong id="adminName">Checking…</strong></div></header>
+<section id="overview" class="ad-section active"><div class="ad-stat-grid"><div class="ad-stat"><span>Total clients</span><strong id="totalClients">—</strong><small>Registered profiles</small></div><div class="ad-stat"><span>Total projects</span><strong id="totalProjects">—</strong><small>Across client accounts</small></div><div class="ad-stat"><span>Active projects</span><strong id="activeProjects">—</strong><small>Not yet completed</small></div><div class="ad-stat"><span>New requests</span><strong id="newRequests">—</strong><small>Awaiting review</small></div></div>
+<div class="ad-grid"><div class="ad-panel"><h2>Workspace</h2><p class="ad-muted">Your business operations at a glance.</p><div class="ad-list" style="margin-top:15px"><div class="ad-row"><div><strong>Client management</strong><small>Review registered accounts and profile information.</small></div><button class="ad-btn" data-goto="clients">Open clients</button></div><div class="ad-row"><div><strong>Project management</strong><small>Create projects and update delivery progress.</small></div><button class="ad-btn" data-goto="projects">Open projects</button></div><div class="ad-row"><div><strong>Service requests</strong><small>Review incoming enquiries and prepare quotations.</small></div><button class="ad-btn" data-goto="requests">Open requests</button></div></div></div><div class="ad-panel"><h2>Recent requests</h2><p class="ad-muted">Latest contact form submissions</p><div id="recentRequests" class="ad-list" style="margin-top:15px"><div class="ad-empty">Loading…</div></div></div></div></section>
+<section id="clients" class="ad-section"><div class="ad-heading"><div><h2>Clients</h2><p>Registered accounts and client profiles.</p></div><button id="refreshClients" class="ad-btn">Refresh</button></div><div class="ad-toolbar"><input id="clientSearch" type="search" placeholder="Search clients by name or email"><span id="clientCount" class="ad-muted"></span></div><div id="clientList" class="ad-list"><div class="ad-empty">Loading client profiles…</div></div></section>
+<section id="projects" class="ad-section"><div class="ad-heading"><div><h2>Projects</h2><p>Create, assign and monitor client work.</p></div><button id="refreshProjects" class="ad-btn">Refresh projects</button></div><form id="projectForm" class="ad-panel ad-form" style="margin-bottom:18px"><h3>Create project</h3><label>Project name<input id="projectName" required maxlength="120" placeholder="Project name"></label><label>Client<select id="projectClient" required><option value="">Select a client</option></select></label><label>Description<textarea id="projectDescription" rows="3" maxlength="1000" placeholder="Scope and project details"></textarea></label><div class="ad-two"><label>Status<select id="projectStatus"><option>Planning</option><option>In progress</option><option>On hold</option><option>Completed</option></select></label><label>Progress (%)<input id="projectProgress" type="number" min="0" max="100" value="0"></label></div><label>Deadline<input id="projectDeadline" type="date"></label><button class="ad-btn primary" type="submit">Create project</button><p id="projectFormStatus" class="ad-message" role="status"></p></form><div id="projectList" class="ad-list"><div class="ad-empty">Loading projects…</div></div></section>
+<section id="requests" class="ad-section"><div class="ad-heading"><div><h2>Orders & Service Requests</h2><p>Enquiries from prospective and existing clients.</p></div><button id="refreshRequests" class="ad-btn">Refresh requests</button></div><div class="ad-toolbar"><input id="requestSearch" type="search" placeholder="Search name, email, service or message"><select id="requestStatusFilter" style="max-width:200px"><option value="">All statuses</option><option>New</option><option>Reviewing</option><option>Quoted</option><option>Accepted</option><option>In progress</option><option>Completed</option><option>Rejected</option></select></div><div id="requestList" class="ad-list"><div class="ad-empty">Loading requests…</div></div><p id="requestStatus" class="ad-message" role="status"></p></section>
+<section id="messages" class="ad-section"><div class="ad-panel"><h2>Messages</h2><p class="ad-muted">Message management will be connected in a future module.</p></div></section><section id="files" class="ad-section"><div class="ad-panel"><h2>Files & Deliverables</h2><p class="ad-muted">Client file delivery and project storage will be added here.</p></div></section><section id="settings" class="ad-section"><div class="ad-panel"><h2>Settings</h2><p class="ad-muted">Administrator and platform settings will be added here.</p></div></section>
+</main></div><script type="module" src="admin.js"></script></body></html>
