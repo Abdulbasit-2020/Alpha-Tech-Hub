@@ -517,17 +517,38 @@
 
 
         // Submit project enquiry to Firebase
-        import { db } from "./firebase.js";
-        import { ref, push, set } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-functions.js";
+        import app from "./firebase.js";
+        const functions = getFunctions(app, "europe-west1");
+        const submitServiceRequest = httpsCallable(functions, "createServiceRequest");
         const contactForm = document.getElementById("contactForm");
         const formStatus = document.getElementById("formStatus");
         contactForm.addEventListener("submit", async function (event) {
-            event.preventDefault(); if (!contactForm.reportValidity()) return;
-            const request={name:document.getElementById("name").value.trim(),email:document.getElementById("email").value.trim(),service:document.getElementById("service").value,budget:document.getElementById("budget").value,message:document.getElementById("message").value.trim(),status:"New",quote:"",adminNotes:"",createdAt:Date.now()};
-            const submitButton=contactForm.querySelector('[type="submit"]');submitButton.disabled=true;formStatus.textContent="Submitting your enquiry…";
-            try{await set(push(ref(db,"serviceRequests")),request);formStatus.textContent="Your enquiry was submitted successfully! Alpha Tech Hub will review it and contact you.";contactForm.reset();}
-            catch(error){console.error("Enquiry submission failed",error);formStatus.textContent="Unable to submit right now. Please contact Alpha Tech Hub through WhatsApp.";}
-            finally{submitButton.disabled=false;}
+            event.preventDefault();
+            if (!contactForm.reportValidity()) return;
+            const submitButton = contactForm.querySelector('[type="submit"]');
+            const payload = {
+                name: document.getElementById("name").value.trim(),
+                email: document.getElementById("email").value.trim(),
+                service: document.getElementById("service").value,
+                budget: document.getElementById("budget").value,
+                message: document.getElementById("message").value.trim()
+            };
+            submitButton.disabled = true;
+            formStatus.textContent = "Submitting your enquiry securely…";
+            try {
+                const result = await submitServiceRequest(payload);
+                if (!result.data || result.data.success !== true) throw new Error("The server did not confirm the request.");
+                formStatus.textContent = "Your enquiry was submitted successfully! Reference: " + result.data.requestId + ". Alpha Tech Hub will contact you.";
+                contactForm.reset();
+            } catch (error) {
+                console.error("Enquiry submission failed", error);
+                formStatus.textContent = error.code === "functions/not-found"
+                    ? "The request service is not deployed yet. Please contact us through WhatsApp."
+                    : "Unable to submit right now. Please try again or contact Alpha Tech Hub through WhatsApp.";
+            } finally {
+                submitButton.disabled = false;
+            }
         });
     </script>
 
