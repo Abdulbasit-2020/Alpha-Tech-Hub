@@ -1,459 +1,187 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Alpha Tech Hub | Modern Websites & Digital Solutions</title>
-
-  <meta name="description" content="Alpha Tech Hub builds modern, responsive websites, landing pages and digital solutions for businesses, individuals and organisations.">
-
-  <meta name="theme-color" content="#070b19">
-
-  <!-- Shared stylesheet -->
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alpha Tech Hub | Digital Experiences That Grow Businesses</title>
+<meta name="description" content="Alpha Tech Hub designs and builds modern websites, landing pages and digital experiences that help businesses grow.">
+<meta name="theme-color" content="#f7faf7b">
+<link rel="stylesheet" href="style.css">
+<style>
+:root{--ah-green:#167a45;--ah-dark:#10281d;--ah-lime:#d8f36a;--ah-soft:#eff7ed;--ah-white:#fff}
+body{background:#f8fbf7;color:#15291e}
+.site-header{background:rgba(248,251,247,.92);border-bottom:1px solid #e2ebe2;backdrop-filter:blur(14px)}
+.navbar{min-height:78px}
+.brand-icon{background:var(--ah-green);color:white;border-radius:14px}
+.brand-text strong{color:var(--ah-dark)}
+.brand-text small{color:#5e7968}
+.nav-links a{color:#304c3a}
+.nav-links a.active{color:var(--ah-green)}
+.nav-cta{color:white!important}
+.ah-hero{position:relative;overflow:hidden;padding:96px 0 88px;background:radial-gradient(ellipse at 80% 20%,#dcefd8 0,transparent 42%),linear-gradient(140deg,#f8fbf7,#edf6ed)}
+.ah-hero:before{content:"";position:absolute;width:430px;height:430px;border:1px solid #bcd8be;border-radius:50%;right:-160px;top:-180px;opacity:.45}
+.ah-grid{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:55px}
+.ah-kicker{display:inline-flex;align-items:center;gap:9px;border:1px solid #c9dfcb;border-radius:99px;padding:9px 14px;background:#ffffffb8;color:#276440;font-size:12px;font-weight:800;letter-spacing:.09em}
+.ah-kicker i{width:8px;height:8px;background:#59ad6e;border-radius:50%;box-shadow:0 0 0 4px #59ad6e25}
+.ah-hero h1{font-size:clamp(2.8rem,6vw,5.1rem);line-height:1.02;letter-spacing:-.055em;color:#13281c;margin:24px 0}
+.ah-hero h1 span{color:var(--ah-green)}
+.ah-lead{font-size:1.08rem;line-height:1.8;max-width:590px;color:#52685a}
+.ah-actions{display:flex;flex-wrap:wrap;gap:13px;margin:30px 0 24px}
+.ah-btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none!important;border-radius:13px;padding:15px 21px;font-weight:800;transition:transform .22s,box-shadow .22s,background .22s}
+.ah-btn:hover{transform:translateY(-3px)}
+.ah-btn-primary{background:#167a45;color:#fff;box-shadow:0 12px 28px #167a4529}
+.ah-btn-primary:hover{background:#105f35}
+.ah-btn-secondary{border:1px solid #d3e3d4;background:#fff;color:#244631}
+.ah-proof{display:flex;gap:19px;flex-wrap:wrap;color:#56705c;font-size:13px;font-weight:700}
+.ah-proof span{display:flex;gap:7px;align-items:center}
+.ah-proof b{color:#25844b}
+.ah-art{min-height:410px;position:relative;display:grid;place-items:center}
+.ah-blob{position:absolute;width:350px;height:350px;background:#dcefd8;border-radius:44% 56% 59% 41%/44% 41% 59% 56%;animation:blobshift 10s ease-in-out infinite}
+.ah-window{position:relative;width:min(100%,430px);background:#fff;border:1px solid #deebdf;border-radius:22px;box-shadow:0 30px 70px #315d3a20;overflow:hidden;transform:rotate(-2deg);animation:float 6s ease-in-out infinite}
+.ah-window-top{padding:15px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #edf2ed}
+.ah-dots{display:flex;gap:5px}.ah-dots i{width:8px;height:8px;border-radius:50%;background:#d3e1d4}
+.ah-window-title{font-size:11px;color:#78907d;font-weight:700}
+.ah-window-body{padding:23px}
+.ah-preview-label{font-size:10px;font-weight:900;letter-spacing:.12em;color:#37804f}
+.ah-preview-title{font-size:27px;line-height:1.13;color:#173321;font-weight:900;margin:11px 0}
+.ah-preview-title span{color:#21814b}
+.ah-preview-copy{font-size:12px;color:#728578;line-height:1.6;max-width:240px}
+.ah-preview-button{display:inline-block;margin-top:14px;padding:9px 13px;background:#1a7d47;color:#fff;border-radius:8px;font-size:11px;font-weight:800}
+.ah-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:22px}
+.ah-metric{padding:12px;border-radius:12px;background:#f2f8f1}
+.ah-metric strong{display:block;font-size:15px;color:#1a7040}
+.ah-metric small{font-size:9px;color:#77907c}
+.ah-float{position:absolute;padding:12px 15px;background:#fff;border:1px solid #e0ebdf;border-radius:14px;box-shadow:0 16px 40px #274f3020;display:flex;gap:10px;align-items:center;animation:float 5s ease-in-out infinite}
+.ah-float strong{font-size:12px;color:#20422d;display:block}.ah-float small{font-size:10px;color:#7a8d7e}
+.ah-float-icon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#e7f4e6;color:#237b45;font-weight:900}
+.ah-float.one{left:-10px;top:36px}.ah-float.two{right:-8px;bottom:35px;animation-delay:-2s}
+.ah-strip{padding:24px 0;background:#fff;border-top:1px solid #e8efe8;border-bottom:1px solid #e8efe8}
+.ah-strip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.ah-strip-item{display:flex;gap:12px;align-items:center}.ah-strip-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:#edf6ec;color:#267b45;font-weight:900}
+.ah-strip-item strong{display:block;font-size:13px;color:#21432d}.ah-strip-item small{display:block;font-size:11px;color:#748579;margin-top:3px}
+.ah-section{padding:86px 0}
+.ah-section-heading{text-align:center;max-width:700px;margin:0 auto 42px}
+.ah-label{font-size:11px;letter-spacing:.15em;color:#27804a;font-weight:900}
+.ah-section-heading h2{font-size:clamp(2rem,4vw,3.2rem);letter-spacing:-.04em;line-height:1.13;margin:14px 0;color:#173021}
+.ah-section-heading p{color:#687a6c;line-height:1.75}
+.ah-services{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.ah-service{padding:26px;border:1px solid #e1ebe1;background:#fff;border-radius:19px;transition:transform .25s,box-shadow .25s,border .25s}
+.ah-service:hover{transform:translateY(-7px);border-color:#b9d7bd;box-shadow:0 20px 45px #21472c12}
+.ah-service-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:14px;background:#edf6ec;color:#237d47;font-size:19px;font-weight:900}
+.ah-service h3{margin:18px 0 10px;color:#1a3423;font-size:18px}
+.ah-service p{color:#6a7c6e;line-height:1.7;font-size:14px}
+.ah-service a{display:inline-block;margin-top:18px;color:#267a45;font-size:13px;font-weight:800;text-decoration:none}
+.ah-process{background:#eaf4e9}
+.ah-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.ah-step{padding:23px;border-radius:17px;background:#ffffff;border:1px solid #dce9dc}
+.ah-step span{font-size:12px;color:#3d9057;font-weight:900;letter-spacing:.1em}
+.ah-step h3{margin:12px 0 8px;color:#23432d}
+.ah-step p{font-size:13px;color:#718275;line-height:1.65}
+.ah-cta{padding:75px 0}
+.ah-cta-panel{border-radius:26px;background:#153d26;color:#fff;padding:48px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:30px}
+.ah-cta-panel:after{content:"";position:absolute;right:-90px;top:-160px;width:350px;height:350px;border:1px solid #ffffff20;border-radius:50%;box-shadow:0 0 0 40px #ffffff08,0 0 0 90px #ffffff05}
+.ah-cta-panel h2{font-size:clamp(1.8rem,4vw,3rem);letter-spacing:-.04em;line-height:1.1;margin:12px 0}
+.ah-cta-panel p{color:#d0e3d3;max-width:550px;line-height:1.7}
+.ah-cta-panel .ah-btn{position:relative;z-index:1;white-space:nowrap;background:#d8f36a;color:#1d3a22}
+.site-footer{background:#10271b;color:#d8e5d9}
+.site-footer .brand-text strong{color:#fff}.site-footer .brand-text small{color:#a9c3ad}
+.site-footer p,.site-footer span,.site-footer a{color:#b9cebd}
+.footer-column h3{color:#fff}
+.ah-reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.ah-reveal.is-visible{opacity:1;transform:translateY(0)}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-12px) rotate(-2deg)}}
+@keyframes blobshift{0%,100%{border-radius:44% 56% 59% 41%/44% 41% 59% 56%}50%{border-radius:59% 41% 43% 57%/55% 57% 43% 45%}}
+@media(max-width:900px){.ah-grid{grid-template-columns:1fr;gap:25px}.ah-hero{padding:70px 0}.ah-art{min-height:390px}.ah-strip-grid{grid-template-columns:repeat(2,1fr)}.ah-services{grid-template-columns:repeat(2,1fr)}.ah-process-grid{grid-template-columns:repeat(2,1fr)}.ah-cta-panel{padding:35px;flex-direction:column;align-items:flex-start}}
+@media(max-width:600px){.ah-hero{padding:55px 0 55px}.ah-hero h1{font-size:clamp(2.5rem,12vw,3.5rem)}.ah-lead{font-size:1rem}.ah-actions{flex-direction:column;align-items:stretch}.ah-btn{justify-content:center}.ah-art{min-height:340px}.ah-blob{width:290px;height:290px}.ah-window{width:94%}.ah-window-body{padding:18px}.ah-preview-title{font-size:23px}.ah-float.one{left:-4px;top:10px}.ah-float.two{right:-4px;bottom:12px}.ah-strip-grid{gap:12px}.ah-strip-item{gap:8px}.ah-strip-icon{width:34px;height:34px}.ah-strip-item strong{font-size:11px}.ah-strip-item small{font-size:10px}.ah-section{padding:65px 0}.ah-services{grid-template-columns:1fr}.ah-process-grid{grid-template-columns:1fr}.ah-cta-panel{padding:28px 22px}.ah-cta-panel .ah-btn{width:100%}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.ah-reveal{opacity:1;transform:none}}
+</style>
 </head>
-
 <body>
-
-  <!-- ================= HEADER ================= -->
-  <header class="site-header">
-    <div class="container navbar">
-
-      <a href="index.html" class="brand" aria-label="Alpha Tech Hub home">
-        <span class="brand-icon">A</span>
-        <span class="brand-text">
-          <strong>Alpha Tech Hub</strong>
-          <small>BUILD. DESIGN. GROW.</small>
-        </span>
-      </a>
-
-      <button
-        class="menu-toggle"
-        id="menuToggle"
-        aria-label="Open navigation menu"
-        aria-expanded="false"
-        aria-controls="navLinks"
-        type="button">
-        ☰
-      </button>
-
-      <nav class="nav-links" id="navLinks">
-        <a href="index.html" class="active">Home</a>
-        <a href="services.html">Services</a>
-        <a href="about.html">About Us</a>
-        <a href="contact.html">Contact</a>
-        <a href="portfolio.html">Portfolio</a>
-        <a href="account.html">Account</a>
-        <a
-          href="https://wa.me/2349157775791"
-          class="btn btn-primary nav-cta"
-          target="_blank"
-          rel="noopener noreferrer">
-          Get Started ↗
-        </a>
-      </nav>
-
+<header class="site-header">
+  <div class="container navbar">
+    <a href="index.html" class="brand" aria-label="Alpha Tech Hub home">
+      <span class="brand-icon">A</span><span class="brand-text"><strong>Alpha Tech Hub</strong><small>BUILD. DESIGN. GROW.</small></span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="navLinks" type="button">☰</button>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html" class="active">Home</a><a href="services.html">Services</a><a href="about.html">About Us</a><a href="portfolio.html">Portfolio</a><a href="contact.html">Contact</a><a href="account.html">Account</a>
+      <a href="https://wa.me/2349157775791" class="btn btn-primary nav-cta" target="_blank" rel="noopener noreferrer">Let's Talk ↗</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section class="ah-hero">
+  <div class="container ah-grid">
+    <div class="ah-hero-content ah-reveal">
+      <span class="ah-kicker"><i></i> DIGITAL PARTNER FOR YOUR NEXT BIG IDEA</span>
+      <h1>We build digital experiences that <span>move businesses forward.</span></h1>
+      <p class="ah-lead">Thoughtful design. Modern technology. Websites that help your business look its best, connect with customers and grow online.</p>
+      <div class="ah-actions"><a class="ah-btn ah-btn-primary" href="contact.html">Start a project <span>↗</span></a><a class="ah-btn ah-btn-secondary" href="services.html">Explore our services <span>→</span></a></div>
+      <div class="ah-proof"><span><b>✓</b> Responsive by design</span><span><b>✓</b> Built around your goals</span><span><b>✓</b> Friendly support</span></div>
     </div>
-  </header>
-
-
-  <main>
-
-    <!-- ================= HERO SECTION ================= -->
-    <section class="hero section">
-      <div class="container hero-grid">
-
-        <div class="hero-content">
-
-          <span class="eyebrow">
-            <span class="status-dot"></span>
-            YOUR VISION, OUR CODE
-          </span>
-
-          <h1>
-            Turning Your Ideas Into
-            <span class="gradient-text">Digital Solutions.</span>
-          </h1>
-
-          <p class="hero-description">
-            We design and build modern websites that help businesses,
-            individuals and organisations establish a strong online
-            presence and reach more people.
-          </p>
-
-          <div class="hero-actions">
-            <a href="contact.html" class="btn btn-primary">
-              Start Your Project <span>→</span>
-            </a>
-
-            <a href="services.html" class="btn btn-outline">
-              Explore Services
-            </a>
-          </div>
-
-          <div class="hero-trust">
-            <span>✓ Responsive websites</span>
-            <span>✓ Modern design</span>
-            <span>✓ Friendly support</span>
-          </div>
-
-        </div>
-
-
-        <!-- Decorative website preview -->
-        <div class="hero-visual">
-
-          <div class="visual-glow"></div>
-
-          <div class="code-window">
-
-            <div class="window-bar">
-              <div class="window-dots">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <span class="window-label">your-next-project.html</span>
-            </div>
-
-            <div class="preview-content">
-
-              <div class="preview-nav">
-                <span class="preview-logo">A<span>.</span></span>
-                <span class="preview-menu">HOME&nbsp;&nbsp; ABOUT&nbsp;&nbsp; CONTACT</span>
-              </div>
-
-              <div class="preview-hero">
-                <span class="preview-tag">YOUR BUSINESS ONLINE</span>
-
-                <h2>Build Your<br>
-                  <span class="gradient-text">Dream Website.</span>
-                </h2>
-
-                <p>
-                  Modern. Responsive.<br>
-                  Designed around your goals.
-                </p>
-
-                <div class="preview-button">Let's Get Started →</div>
-              </div>
-
-              <div class="preview-cards">
-                <div class="preview-card">
-                  <span>⌘</span>
-                  <strong>Design</strong>
-                </div>
-                <div class="preview-card">
-                  <span>〈/〉</span>
-                  <strong>Development</strong>
-                </div>
-                <div class="preview-card">
-                  <span>↗</span>
-                  <strong>Growth</strong>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <div class="floating-badge badge-top">
-            <span class="floating-icon">✦</span>
-            <span>
-              <strong>Creative Ideas</strong>
-              <small>Built for your brand</small>
-            </span>
-          </div>
-
-          <div class="floating-badge badge-bottom">
-            <span class="floating-icon">✓</span>
-            <span>
-              <strong>Mobile Friendly</strong>
-              <small>Every screen matters</small>
-            </span>
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- ================= VALUE STRIP ================= -->
-    <section class="feature-strip">
-      <div class="container feature-grid">
-
-        <article class="feature-item">
-          <span class="feature-icon blue">〈/〉</span>
-          <div>
-            <h3>Modern Development</h3>
-            <p>Clean, well-structured websites.</p>
-          </div>
-        </article>
-
-        <article class="feature-item">
-          <span class="feature-icon purple">▣</span>
-          <div>
-            <h3>Responsive Design</h3>
-            <p>Designed for mobile and desktop.</p>
-          </div>
-        </article>
-
-        <article class="feature-item">
-          <span class="feature-icon green">✓</span>
-          <div>
-            <h3>Reliable Support</h3>
-            <p>Help when your website needs it.</p>
-          </div>
-        </article>
-
-        <article class="feature-item">
-          <span class="feature-icon orange">↗</span>
-          <div>
-            <h3>Business Focused</h3>
-            <p>Digital tools for your goals.</p>
-          </div>
-        </article>
-
-      </div>
-    </section>
-
-
-    <!-- VISUAL SHOWCASE -->
-    <section class="section" style="padding-top:35px">
-      <div class="container">
-        <div class="visual-showcase">
-          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=85" alt="Modern analytics dashboard on a laptop" loading="lazy">
-          <div class="visual-showcase-copy">
-            <span class="section-label">DIGITAL PRESENCE THAT WORKS</span>
-            <h2>Give your ideas a <span class="gradient-text">professional online home.</span></h2>
-            <p>From business websites to digital platforms, we combine clear layouts, thoughtful visuals and responsive development to help your audience connect with your brand.</p>
-            <a href="portfolio.html" class="btn btn-primary">See Our Projects ↗</a>
-          </div>
+    <div class="ah-art ah-reveal" aria-label="Website design preview illustration">
+      <div class="ah-blob"></div>
+      <div class="ah-window">
+        <div class="ah-window-top"><span class="ah-dots"><i></i><i></i><i></i></span><span class="ah-window-title">your-business-website.com</span><span>↗</span></div>
+        <div class="ah-window-body">
+          <div class="ah-preview-label">YOUR BUSINESS. ONLINE.</div>
+          <h2 class="ah-preview-title">A better way to<br><span>grow your brand.</span></h2>
+          <p class="ah-preview-copy">A beautiful digital home built to connect with your customers and make your business stand out.</p>
+          <span class="ah-preview-button">Discover more ↗</span>
+          <div class="ah-metrics"><div class="ah-metric"><strong>Design</strong><small>Made to impress</small></div><div class="ah-metric"><strong>Develop</strong><small>Built to perform</small></div><div class="ah-metric"><strong>Grow</strong><small>Ready for tomorrow</small></div></div>
         </div>
       </div>
-    </section>
-
-    <!-- ================= SERVICES PREVIEW ================= -->
-    <section class="section services-preview">
-      <div class="container">
-
-        <div class="section-heading">
-          <span class="section-label">WHAT WE DO</span>
-
-          <h2>
-            Solutions That Help You
-            <span class="gradient-text">Grow Online.</span>
-          </h2>
-
-          <p>
-            Practical website services to help you launch, improve
-            and maintain your online presence.
-          </p>
-        </div>
-
-
-        <div class="service-grid">
-
-          <article class="service-card">
-            <div class="service-icon blue">⌘</div>
-            <h3>Web Design & Development</h3>
-            <p>
-              Professional, responsive websites designed to
-              introduce your business to the world.
-            </p>
-            <a href="services.html" class="text-link">
-              Explore service →
-            </a>
-          </article>
-
-          <article class="service-card">
-            <div class="service-icon purple">↗</div>
-            <h3>Landing Pages</h3>
-            <p>
-              Focused web pages that present your offer and guide
-              visitors toward taking action.
-            </p>
-            <a href="services.html" class="text-link">
-              Explore service →
-            </a>
-          </article>
-
-          <article class="service-card">
-            <div class="service-icon green">⚙</div>
-            <h3>Website Updates</h3>
-            <p>
-              Update existing website content, improve layouts
-              and make corrections when needed.
-            </p>
-            <a href="services.html" class="text-link">
-              Explore service →
-            </a>
-          </article>
-
-          <article class="service-card">
-            <div class="service-icon orange">🌐</div>
-            <h3>Website Publishing</h3>
-            <p>
-              Get assistance publishing your website online
-              through platforms such as GitHub Pages.
-            </p>
-            <a href="services.html" class="text-link">
-              Explore service →
-            </a>
-          </article>
-
-        </div>
-
-        <div class="center-action">
-          <a href="services.html" class="btn btn-outline">
-            View All Services →
-          </a>
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- ================= CALL TO ACTION ================= -->
-    <section class="section">
-      <div class="container">
-
-        <div class="cta-panel">
-          <div class="cta-content">
-            <span class="section-label">HAVE AN IDEA?</span>
-
-            <h2>
-              Let's Build Something
-              <span class="gradient-text">Great Together.</span>
-            </h2>
-
-            <p>
-              Tell us about your project. Let's discuss how a
-              professional website can help bring your idea to life.
-            </p>
-
-            <div class="hero-actions">
-              <a href="contact.html" class="btn btn-primary">
-                Contact Alpha Tech Hub →
-              </a>
-
-              <a
-                href="https://wa.me/2349157775791?text=Hello%20Alpha%20Tech%20Hub%2C%20I%20would%20like%20to%20discuss%20a%20website%20project."
-                class="btn btn-outline"
-                target="_blank"
-                rel="noopener noreferrer">
-                WhatsApp Us
-              </a>
-            </div>
-          </div>
-
-          <div class="cta-decoration" aria-hidden="true">
-            <div class="orbit orbit-one"></div>
-            <div class="orbit orbit-two"></div>
-            <div class="orbit-core">A<span>.</span></div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-  </main>
-
-
-  <!-- ================= FOOTER ================= -->
-  <footer class="site-footer">
-    <div class="container">
-
-      <div class="footer-main">
-
-        <div class="footer-brand">
-          <a href="index.html" class="brand">
-            <span class="brand-icon">A</span>
-            <span class="brand-text">
-              <strong>Alpha Tech Hub</strong>
-              <small>BUILD. DESIGN. GROW.</small>
-            </span>
-          </a>
-
-          <p>
-            Helping ideas and businesses grow through modern,
-            accessible web design and development.
-          </p>
-        </div>
-
-        <div class="footer-column">
-          <h3>Quick Links</h3>
-          <a href="index.html">Home</a>
-          <a href="services.html">Services</a>
-          <a href="about.html">About Us</a>
-          <a href="contact.html">Contact</a>
-        </div>
-
-        <div class="footer-column">
-          <h3>Contact Us</h3>
-
-          <a href="mailto:alphatech3026@gmail.com">
-            alphatech3026@gmail.com
-          </a>
-
-          <a
-            href="https://wa.me/2349157775791"
-            target="_blank"
-            rel="noopener noreferrer">
-            WhatsApp: +234 915 777 5791 · +234 911 689 8040
-          </a>
-
-          <span>Nigeria · Remote Services</span>
-        </div>
-
-      </div>
-
-      <div class="footer-bottom">
-        <p>
-          © <span id="currentYear"></span> Alpha Tech Hub.
-          All rights reserved.
-        </p>
-        <p>Built with care and code. <span class="gradient-text">✦</span></p>
-        <p><a href="admin.html">Admin Console</a></p>
-      </div>
-
+      <div class="ah-float one"><span class="ah-float-icon">✦</span><span><strong>Fresh ideas</strong><small>Designed for your brand</small></span></div>
+      <div class="ah-float two"><span class="ah-float-icon">✓</span><span><strong>Mobile-ready</strong><small>Every screen matters</small></span></div>
     </div>
-  </footer>
-
-
-  <!-- ================= JAVASCRIPT ================= -->
-  <script>
-    const menuToggle = document.getElementById("menuToggle");
-    const navLinks = document.getElementById("navLinks");
-
-    menuToggle.addEventListener("click", function () {
-      const isOpen = navLinks.classList.toggle("show");
-
-      menuToggle.setAttribute("aria-expanded", isOpen);
-      menuToggle.setAttribute(
-        "aria-label",
-        isOpen ? "Close navigation menu" : "Open navigation menu"
-      );
-
-      menuToggle.textContent = isOpen ? "✕" : "☰";
-    });
-
-    // Close the mobile menu after selecting a link.
-    navLinks.querySelectorAll("a").forEach(function (link) {
-      link.addEventListener("click", function () {
-        navLinks.classList.remove("show");
-        menuToggle.setAttribute("aria-expanded", "false");
-        menuToggle.setAttribute("aria-label", "Open navigation menu");
-        menuToggle.textContent = "☰";
-      });
-    });
-
-    // Display the current year automatically.
-    document.getElementById("currentYear").textContent =
-      new Date().getFullYear();
-  </script>
-
+  </div>
+</section>
+<section class="ah-strip"><div class="container ah-strip-grid">
+  <div class="ah-strip-item"><span class="ah-strip-icon">⌘</span><span><strong>Modern Development</strong><small>Clean, thoughtful code</small></span></div>
+  <div class="ah-strip-item"><span class="ah-strip-icon">▣</span><span><strong>Responsive Design</strong><small>Works across devices</small></span></div>
+  <div class="ah-strip-item"><span class="ah-strip-icon">↗</span><span><strong>Business Focus</strong><small>Built around your needs</small></span></div>
+  <div class="ah-strip-item"><span class="ah-strip-icon">♡</span><span><strong>Support & Care</strong><small>Here when you need us</small></span></div>
+</div></section>
+<section class="ah-section"><div class="container">
+  <div class="ah-section-heading ah-reveal"><span class="ah-label">WHAT WE DO</span><h2>Digital solutions for your <span>next chapter.</span></h2><p>Whether you're starting from scratch or ready to improve, we bring your ideas online with practical, modern web solutions.</p></div>
+  <div class="ah-services">
+    <article class="ah-service ah-reveal"><div class="ah-service-icon">⌘</div><h3>Web Design & Development</h3><p>Beautiful, responsive websites that give your business a credible and engaging online presence.</p><a href="services.html">Explore service →</a></article>
+    <article class="ah-service ah-reveal"><div class="ah-service-icon">↗</div><h3>Landing Pages</h3><p>Focused pages that communicate your offer clearly and guide visitors toward taking action.</p><a href="services.html">Explore service →</a></article>
+    <article class="ah-service ah-reveal"><div class="ah-service-icon">✧</div><h3>Website Redesign</h3><p>Refresh outdated websites with better structure, visual design, usability and mobile experience.</p><a href="services.html">Explore service →</a></article>
+    <article class="ah-service ah-reveal"><div class="ah-service-icon">⚙</div><h3>Website Maintenance</h3><p>Keep your website updated, tidy and working smoothly as your needs change.</p><a href="services.html">Explore service →</a></article>
+    <article class="ah-service ah-reveal"><div class="ah-service-icon">◈</div><h3>Web Applications</h3><p>Interactive web experiences and tools designed to make tasks easier and smarter.</p><a href="services.html">Explore service →</a></article>
+    <article class="ah-service ah-reveal"><div class="ah-service-icon">◎</div><h3>Publishing & Launch</h3><p>Get your website deployed and accessible online with help through the launch process.</p><a href="services.html">Explore service →</a></article>
+  </div>
+</div></section>
+<section class="ah-section ah-process"><div class="container">
+  <div class="ah-section-heading ah-reveal"><span class="ah-label">HOW WE WORK</span><h2>From idea to <span>online.</span></h2><p>A straightforward process keeps your project clear, collaborative and moving forward.</p></div>
+  <div class="ah-process-grid">
+    <article class="ah-step ah-reveal"><span>01 / DISCOVER</span><h3>Understand your idea</h3><p>We learn about your business, goals, audience and what you want your website to achieve.</p></article>
+    <article class="ah-step ah-reveal"><span>02 / DESIGN</span><h3>Shape the experience</h3><p>We map out the structure and visual direction to make your website clear and engaging.</p></article>
+    <article class="ah-step ah-reveal"><span>03 / BUILD</span><h3>Bring it to life</h3><p>We develop, refine and test your website across different screen sizes and devices.</p></article>
+    <article class="ah-step ah-reveal"><span>04 / LAUNCH</span><h3>Go live with confidence</h3><p>We help get your website online and provide guidance for the next steps.</p></article>
+  </div>
+</div></section>
+<section class="ah-cta"><div class="container"><div class="ah-cta-panel ah-reveal">
+  <div><span class="ah-label" style="color:#c8e77c">LET'S CREATE SOMETHING</span><h2>Your idea deserves<br>a place online.</h2><p>Have a project in mind? Let's turn your vision into a digital experience that your customers can connect with.</p></div>
+  <a href="contact.html" class="ah-btn">Tell us about your project ↗</a>
+</div></div></section>
+</main>
+<footer class="site-footer"><div class="container">
+  <div class="footer-main">
+    <div class="footer-brand"><a href="index.html" class="brand"><span class="brand-icon">A</span><span class="brand-text"><strong>Alpha Tech Hub</strong><small>BUILD. DESIGN. GROW.</small></span></a><p>Helping ideas and businesses grow through modern web design and development.</p></div>
+    <div class="footer-column"><h3>Explore</h3><a href="index.html">Home</a><a href="services.html">Services</a><a href="about.html">About Us</a><a href="portfolio.html">Portfolio</a><a href="contact.html">Contact</a></div>
+    <div class="footer-column"><h3>Let's Connect</h3><a href="mailto:alphatech3026@gmail.com">alphatech3026@gmail.com</a><a href="https://wa.me/2349157775791" target="_blank" rel="noopener noreferrer">WhatsApp: +234 915 777 5791</a><span>Nigeria · Remote Services</span></div>
+  </div>
+  <div class="footer-bottom"><p>© <span id="currentYear"></span> Alpha Tech Hub. All rights reserved.</p><p>Built with care and code. <span style="color:#b9db66">✦</span></p><p><a href="admin.html">Admin Console</a></p></div>
+</div></footer>
+<script>
+const menuToggle=document.getElementById("menuToggle"),navLinks=document.getElementById("navLinks");
+menuToggle?.addEventListener("click",()=>{const open=navLinks.classList.toggle("show");menuToggle.setAttribute("aria-expanded",open);menuToggle.setAttribute("aria-label",open?"Close navigation menu":"Open navigation menu");menuToggle.textContent=open?"✕":"☰"});
+navLinks?.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{navLinks.classList.remove("show");menuToggle.setAttribute("aria-expanded","false");menuToggle.setAttribute("aria-label","Open navigation menu");menuToggle.textContent="☰"}));
+document.getElementById("currentYear").textContent=new Date().getFullYear();
+const revealObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("is-visible");revealObserver.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll(".ah-reveal").forEach(el=>revealObserver.observe(el));
+</script>
 </body>
 </html>
