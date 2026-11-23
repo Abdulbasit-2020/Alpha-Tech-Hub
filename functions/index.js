@@ -21,7 +21,7 @@ exports.createServiceRequest = onCall(
     if (!name || !email || !service || !message) {
       throw new HttpsError("invalid-argument", "Name, email, service and message are required.");
     }
-    if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       throw new HttpsError("invalid-argument", "Enter a valid email address.");
     }
 
