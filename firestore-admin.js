@@ -30,7 +30,7 @@ function renderClients() {
 }
 function renderProjects() {
   $("projectsList").innerHTML = projects.length ? projects.map(p =>
-    '<article><div><strong>' + esc(p.name || "Unnamed project") + '</strong><small>' + esc(p.clientName || p.clientUid || "Client not assigned") + ' · ' + esc(p.status || "Planning") + ' · ' + esc(p.progress ?? 0) + '% · ' + esc(p.deadline || "No deadline") + '</small></div></article>'
+    '<article><div><strong>' + esc(p.name || "Unnamed project") + '</strong><small>' + esc(p.clientName || p.clientUid || "Client not assigned") + ' · ' + esc(p.status || "Planning") + ' · ' + esc(p.progress ?? 0) + '% · ' + esc(p.deadline || "No deadline") + '</small></div><button data-edit-project="' + esc(p.id) + '">Edit</button></article>'
   ).join("") : '<article>No Firestore projects yet.</article>';
 }
 function renderRequests() {
@@ -76,7 +76,41 @@ $("projectForm").addEventListener("submit", async event => {
     await refresh();
   } catch (error) { $("projectMessage").textContent = "Project creation failed: " + error.message; }
 });
-$("requestsList").addEventListener("click", async event => {
+$("projectsList").addEventListener("click", event => {
+  const button = event.target.closest("[data-edit-project]");
+  if (!button) return;
+  const project = projects.find(p => p.id === button.dataset.editProject);
+  if (!project) return;
+  $("editProjectId").value = project.id;
+  $("editProjectName").value = project.name || "";
+  $("editClientUid").value = project.clientUid || "";
+  $("editClientName").value = project.clientName || "";
+  $("editProjectDesc").value = project.description || "";
+  $("editProjectStatus").value = project.status || "Planning";
+  $("editProjectProgress").value = project.progress ?? 0;
+  $("editProjectDeadline").value = project.deadline || "";
+  $("projectEditMessage").textContent = "";
+  $("projectEditForm").hidden = false;
+  $("projectEditForm").scrollIntoView({behavior:"smooth",block:"start"});
+});
+$("cancelProjectEdit").addEventListener("click", () => { $("projectEditForm").hidden = true; });
+$("projectEditForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  const progress = Number($("editProjectProgress").value);
+  if (!Number.isFinite(progress) || progress < 0 || progress > 100) { $("projectEditMessage").textContent = "Progress must be between 0 and 100."; return; }
+  try {
+    await updateDoc(doc(db, "projects", $("editProjectId").value), {
+      name: $("editProjectName").value.trim(), clientUid: $("editClientUid").value.trim(),
+      clientName: $("editClientName").value.trim(), description: $("editProjectDesc").value.trim(),
+      status: $("editProjectStatus").value, progress, deadline: $("editProjectDeadline").value,
+      updatedAt: Date.now(), updatedBy: auth.currentUser.uid
+    });
+    $("projectEditMessage").textContent = "Project updated successfully.";
+    $("projectEditForm").hidden = true;
+    await refresh();
+  } catch (error) { $("projectEditMessage").textContent = "Update failed: " + error.message; }
+});
+\n$("requestsList").addEventListener("click", async event => {
   const btn = event.target.closest("[data-save-request]");
   if (!btn) return;
   const id = btn.dataset.saveRequest;
