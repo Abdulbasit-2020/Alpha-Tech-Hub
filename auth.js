@@ -1,4 +1,4 @@
-import { auth, default as app } from "./firebase.js";
+import { auth, db } from "./firestore.js";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -6,10 +6,9 @@ import {
   sendPasswordResetEmail,
   signOut
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-functions.js";
-
-const functions = getFunctions(app, "europe-west1");
-const ensureClientProfile = httpsCallable(functions, "ensureClientProfile");
+import {
+  doc, getDoc, setDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 const form = document.getElementById("authForm");
 const loginTab = document.getElementById("loginTab");
@@ -46,8 +45,34 @@ function setMode(nextMode) {
   setStatus("");
 }
 
-loginTab.addEventListener("click", () => setMode("login"));
-registerTab.addEventListener("click", () => setMode("register"));
+async function saveClientProfile(user, name) {
+  const uid = user.uid;
+  const cleanName = String(name || user.displayName || user.email?.split("@")[0] || "Client").trim().slice(0, 80);
+  const userRef = doc(db, "users", uid);
+  const clientRef = doc(db, "clients", uid);
+  const clientSnap = await getDoc(clientRef);
+
+  await setDoc(userRef, {
+    uid,
+    fullName: cleanName,
+    email: user.email,
+    emailVerified: user.emailVerified,
+    updatedAt: serverTimestamp()
+  }, { merge: true });
+
+  // A client can create only their own initial Pending record.
+  // Only an administrator can later change its status.
+  if (!clientSnap.exists()) {
+    await setDoc(clientRef, {
+      uid,
+      fullName: cleanName,
+      email: user.email,
+      status: "Pending",
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+  }
+}
 
 resetLink.addEventListener("click", async () => {
   const email = emailInput.value.trim();
@@ -64,6 +89,9 @@ resetLink.addEventListener("click", async () => {
   }
 });
 
+loginTab.addEventListener("click", () => setMode("login"));
+registerTab.addEventListener("click", () => setMode("register"));
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const email = emailInput.value.trim();
@@ -75,10 +103,7 @@ form.addEventListener("submit", async (event) => {
     if (mode === "register") {
       const name = fullName.value.trim();
       const credential = await createUserWithEmailAndPassword(auth, email, password);
-      await ensureClientProfile({
-        fullName: name,
-        email: credential.user.email
-      });
+      await saveClientProfile(credential.user, name);
       await sendEmailVerification(credential.user);
       await signOut(auth);
       form.reset();
@@ -92,10 +117,7 @@ form.addEventListener("submit", async (event) => {
         setStatus("Your email is not verified yet. We sent a fresh verification link; check your inbox.", "error");
         return;
       }
-      await ensureClientProfile({
-        fullName: credential.user.displayName || credential.user.email.split("@")[0],
-        email: credential.user.email
-      });
+      await saveClientProfile(credential.user);
       setStatus("Signed in successfully. Opening your client portal…", "success");
       window.location.href = "firestore-client.html";
     }
