@@ -1,5 +1,5 @@
 // Alpha Tech Hub — Firestore connection
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 const firebaseConfig = {
@@ -11,7 +11,7 @@ const firebaseConfig = {
   messagingSenderId: "701524294623",
   appId: "1:701524294623:web:8193198f514dac7fb5226a"
 };
-const app = initializeApp(firebaseConfig);
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export default app;
