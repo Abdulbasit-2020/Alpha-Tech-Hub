@@ -92,7 +92,7 @@ $("clientEditForm").addEventListener("submit", async event => {
     renderClients();
   } catch (error) { $("clientEditMessage").textContent = "Client update failed: " + error.message; }
 });
-\n$("clientSearch").addEventListener("input", renderClients);
+$("clientSearch").addEventListener("input", renderClients);
 $("refreshClients").addEventListener("click", refresh);
 $("projectForm").addEventListener("submit", async event => {
   event.preventDefault();
@@ -144,7 +144,7 @@ $("projectEditForm").addEventListener("submit", async event => {
     await refresh();
   } catch (error) { $("projectEditMessage").textContent = "Update failed: " + error.message; }
 });
-\n$("requestsList").addEventListener("click", async event => {
+$("requestsList").addEventListener("click", async event => {
   const btn = event.target.closest("[data-save-request]");
   if (!btn) return;
   const id = btn.dataset.saveRequest;
