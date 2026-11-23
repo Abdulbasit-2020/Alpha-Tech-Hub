@@ -23,6 +23,17 @@
 .dash-placeholder{min-height:130px;display:grid;align-content:center;gap:8px}
 .dash-placeholder .placeholder-icon{font-size:24px;color:#91aaff}
 @media(max-width:650px){.dash-grid{grid-template-columns:1fr}.dash-card{padding:20px}.dashboard-wrap{padding-top:35px}}
+
+.client-project-list{display:grid;gap:14px;margin-top:16px}
+.client-project{border:1px solid var(--border);border-radius:14px;padding:18px;background:var(--bg-light)}
+.client-project-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.client-project-title{font-size:17px;font-weight:800}
+.client-project-status{font-size:12px;padding:5px 10px;border-radius:99px;background:#26364d;color:#cfe0ff}
+.client-project-meta{display:flex;gap:15px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin:9px 0}
+.client-project-progress{height:8px;background:var(--border);border-radius:99px;overflow:hidden;margin:12px 0 6px}
+.client-project-progress span{display:block;height:100%;background:var(--gradient);border-radius:99px}
+.client-project-empty{padding:16px;border:1px dashed var(--border);border-radius:12px;color:var(--muted)}
+@media(max-width:650px){.client-project{padding:15px}}
 </style>
 </head>
 <body>
@@ -60,7 +71,7 @@
 <div class="dash-grid">
 <article class="dash-card"><h2>Account profile</h2><p>Name</p><p class="dash-value" id="profileName">—</p><p style="margin-top:12px">Email</p><p class="dash-value" id="profileEmail">—</p></article>
 <article class="dash-card"><h2>Account security</h2><p>Email verification status</p><p class="dash-value" id="verificationStatus">Checking…</p><div class="dash-actions"><button id="resendVerification" class="btn btn-outline" type="button" hidden>Resend verification</button></div></article>
-<article class="dash-card dash-placeholder"><span class="placeholder-icon">◈</span><h2>Projects</h2><p>Your project space will appear here as project management is added.</p></article>
+<article class="dash-card" id="clientProjectsCard" style="grid-column:1/-1"><h2>My Projects</h2><p>Projects assigned to your account and their latest progress.</p><div id="clientProjects" class="client-project-list"><p class="client-project-empty">Projects will appear here when Alpha Tech Hub assigns them to your account.</p></div></article>
 <article class="dash-card dash-placeholder"><span class="placeholder-icon">✉</span><h2>Messages & support</h2><p>Client communication tools are planned for a future update.</p><div class="dash-actions"><a class="btn btn-outline" href="contact.html">Contact Alpha Tech Hub</a></div></article>
 </div>
 </div>
