@@ -6,7 +6,10 @@ import {
   sendPasswordResetEmail,
   signOut
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-import { ref, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-functions.js";
+
+const functions = getFunctions((await import("./firebase.js")).default, "europe-west1");
+const ensureClientProfile = httpsCallable(functions, "ensureClientProfile");
 
 const form = document.getElementById("authForm");
 const loginTab = document.getElementById("loginTab");
@@ -72,12 +75,9 @@ form.addEventListener("submit", async (event) => {
     if (mode === "register") {
       const name = fullName.value.trim();
       const credential = await createUserWithEmailAndPassword(auth, email, password);
-      await set(ref(db, "users/" + credential.user.uid), {
-        uid: credential.user.uid,
+      await ensureClientProfile({
         fullName: name,
-        email: credential.user.email,
-        createdAt: Date.now(),
-        emailVerified: false
+        email: credential.user.email
       });
       await sendEmailVerification(credential.user);
       await signOut(auth);
@@ -92,8 +92,12 @@ form.addEventListener("submit", async (event) => {
         setStatus("Your email is not verified yet. We sent a fresh verification link; check your inbox.", "error");
         return;
       }
-      setStatus("Signed in successfully. Opening your dashboard…", "success");
-      window.location.href = "dashboard.html";
+      await ensureClientProfile({
+        fullName: credential.user.displayName || credential.user.email.split("@")[0],
+        email: credential.user.email
+      });
+      setStatus("Signed in successfully. Opening your client portal…", "success");
+      window.location.href = "firestore-client.html";
     }
   } catch (error) {
     const messages = {
