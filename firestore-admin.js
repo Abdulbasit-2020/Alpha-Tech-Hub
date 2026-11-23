@@ -23,9 +23,9 @@ async function fetchCollection(name) {
 }
 function renderClients() {
   const term = $("clientSearch").value.trim().toLowerCase();
-  const filtered = clients.filter(c => String(c.fullName || c.name || "").toLowerCase().includes(term) || String(c.email || "").toLowerCase().includes(term));
+  const filtered = clients.filter(c => String(c.fullName || c.name || "").toLowerCase().includes(term) || String(c.email || "").toLowerCase().includes(term) || String(c.uid || c.id).toLowerCase().includes(term));
   $("clientsList").innerHTML = filtered.length ? filtered.map(c =>
-    '<article><div><strong>' + esc(c.fullName || c.name || "Unnamed client") + '</strong><small>' + esc(c.email || "No email") + '</small><small>UID: ' + esc(c.uid || c.id) + '</small></div></article>'
+    '<article><div><strong>' + esc(c.fullName || c.name || "Unnamed client") + '</strong><small>' + esc(c.email || "No email") + '</small><small>UID: ' + esc(c.uid || c.id) + '</small><small>' + esc(c.phone || "No phone provided") + ' · ' + esc(c.status || "Active") + '</small></div><button data-edit-client="' + esc(c.id) + '">View / Edit</button></article>'
   ).join("") : '<article>No client records found in Firestore.</article>';
 }
 function renderProjects() {
@@ -58,7 +58,41 @@ async function refresh() {
     notice.textContent = "Firestore load failed: " + error.message + " — check database setup and rules.";
   }
 }
-$("clientSearch").addEventListener("input", renderClients);
+$("clientsList").addEventListener("click", event => {
+  const button = event.target.closest("[data-edit-client]");
+  if (!button) return;
+  const client = clients.find(c => c.id === button.dataset.editClient);
+  if (!client) return;
+  $("editClientDocId").value = client.id;
+  $("clientFullName").value = client.fullName || client.name || "";
+  $("clientEmail").value = client.email || "";
+  $("clientPhone").value = client.phone || "";
+  $("clientCompany").value = client.company || "";
+  $("clientStatus").value = client.status || "Active";
+  $("clientEditMessage").textContent = "";
+  $("clientEditForm").hidden = false;
+  $("clientEditForm").scrollIntoView({behavior:"smooth",block:"start"});
+});
+$("cancelClientEdit").addEventListener("click", () => { $("clientEditForm").hidden = true; });
+$("clientEditForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  try {
+    await updateDoc(doc(db, "clients", $("editClientDocId").value), {
+      fullName: $("clientFullName").value.trim(),
+      email: $("clientEmail").value.trim(),
+      phone: $("clientPhone").value.trim(),
+      company: $("clientCompany").value.trim(),
+      status: $("clientStatus").value,
+      updatedAt: Date.now(),
+      updatedBy: auth.currentUser.uid
+    });
+    $("clientEditMessage").textContent = "Client record updated.";
+    $("clientEditForm").hidden = true;
+    clients = await fetchCollection("clients");
+    renderClients();
+  } catch (error) { $("clientEditMessage").textContent = "Client update failed: " + error.message; }
+});
+\n$("clientSearch").addEventListener("input", renderClients);
 $("refreshClients").addEventListener("click", refresh);
 $("projectForm").addEventListener("submit", async event => {
   event.preventDefault();
