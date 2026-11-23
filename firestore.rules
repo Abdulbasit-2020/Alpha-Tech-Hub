@@ -8,12 +8,11 @@ service cloud.firestore {
         request.resource.data.uid == userId;
     }
     function validServiceRequest() {
-      return request.resource.data.keys().hasOnly(['name','email','phone','service','message','status','createdAt']) &&
+      return request.resource.data.keys().hasOnly(['name','email','phone','service','budget','message','status','createdAt','submittedBy','source']) &&
         request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 120 &&
         request.resource.data.email is string && request.resource.data.email.size() <= 200 &&
         request.resource.data.message is string && request.resource.data.message.size() <= 3000;
     }
-
     match /users/{userId} {
       allow read: if isAdmin() || (signedIn() && request.auth.uid == userId);
       allow create, update: if isAdmin() || (signedIn() && request.auth.uid == userId && validUserProfile(userId));
@@ -32,7 +31,8 @@ service cloud.firestore {
       allow create: if validServiceRequest();
     }
     match /payments/{paymentId} {
-      allow read, write: if isAdmin();
+      allow read: if isAdmin() || (signedIn() && resource.data.clientUid == request.auth.uid);
+      allow create, update, delete: if isAdmin();
     }
     match /messages/{messageId} {
       allow read, write: if isAdmin();
