@@ -16,6 +16,7 @@ exports.createServiceRequest = onCall(
     const phone = clean(data.phone, 40);
     const service = clean(data.service, 120);
     const message = clean(data.message, 3000);
+    const budget = clean(data.budget, 80);
 
     if (!name || !email || !service || !message) {
       throw new HttpsError("invalid-argument", "Name, email, service and message are required.");
@@ -25,7 +26,7 @@ exports.createServiceRequest = onCall(
     }
 
     const ref = await db.collection("serviceRequests").add({
-      name, email, phone, service, message,
+      name, email, phone, service, budget, message,
       status: "New",
       createdAt: FieldValue.serverTimestamp(),
       submittedBy: request.auth ? request.auth.uid : null,
