@@ -7,7 +7,7 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 import {
-  doc, setDoc, serverTimestamp
+  doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 const form = document.getElementById("authForm");
@@ -49,6 +49,8 @@ async function saveClientProfile(user, name, createClient = false) {
   const uid = user.uid;
   const cleanName = String(name || user.displayName || user.email?.split("@")[0] || "Client").trim().slice(0, 80);
   const userRef = doc(db, "users", uid);
+  const clientRef = doc(db, "clients", uid);
+  const clientSnap = await getDoc(clientRef);
   await setDoc(userRef, {
     uid,
     fullName: cleanName,
@@ -57,10 +59,10 @@ async function saveClientProfile(user, name, createClient = false) {
     updatedAt: serverTimestamp()
   }, { merge: true });
 
-  // Create the initial client record only during registration. Avoid reading
-  // a possibly-missing client document, which Firestore rules correctly deny.
-  if (createClient) {
-    await setDoc(doc(db, "clients", uid), {
+  // Create the initial client record if it does not exist. The rules permit
+  // each signed-in user to read their own document by UID, including when absent.
+  if (!clientSnap.exists()) {
+    await setDoc(clientRef, {
       uid,
       fullName: cleanName,
       email: user.email,
@@ -100,7 +102,7 @@ form.addEventListener("submit", async (event) => {
     if (mode === "register") {
       const name = fullName.value.trim();
       const credential = await createUserWithEmailAndPassword(auth, email, password);
-      await saveClientProfile(credential.user, name, true);
+      await saveClientProfile(credential.user, name);
       await sendEmailVerification(credential.user);
       await signOut(auth);
       form.reset();
@@ -114,7 +116,7 @@ form.addEventListener("submit", async (event) => {
         setStatus("Your email is not verified yet. We sent a fresh verification link; check your inbox.", "error");
         return;
       }
-      await saveClientProfile(credential.user, "", false);
+      await saveClientProfile(credential.user);
       setStatus("Signed in successfully. Opening your client portal…", "success");
       window.location.href = "firestore-client.html";
     }
