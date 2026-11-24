@@ -7,7 +7,7 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 import {
-  doc, getDoc, setDoc, serverTimestamp
+  doc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 const form = document.getElementById("authForm");
@@ -45,13 +45,10 @@ function setMode(nextMode) {
   setStatus("");
 }
 
-async function saveClientProfile(user, name) {
+async function saveClientProfile(user, name, createClient = false) {
   const uid = user.uid;
   const cleanName = String(name || user.displayName || user.email?.split("@")[0] || "Client").trim().slice(0, 80);
   const userRef = doc(db, "users", uid);
-  const clientRef = doc(db, "clients", uid);
-  const clientSnap = await getDoc(clientRef);
-
   await setDoc(userRef, {
     uid,
     fullName: cleanName,
@@ -60,10 +57,10 @@ async function saveClientProfile(user, name) {
     updatedAt: serverTimestamp()
   }, { merge: true });
 
-  // A client can create only their own initial Pending record.
-  // Only an administrator can later change its status.
-  if (!clientSnap.exists()) {
-    await setDoc(clientRef, {
+  // Create the initial client record only during registration. Avoid reading
+  // a possibly-missing client document, which Firestore rules correctly deny.
+  if (createClient) {
+    await setDoc(doc(db, "clients", uid), {
       uid,
       fullName: cleanName,
       email: user.email,
@@ -103,7 +100,7 @@ form.addEventListener("submit", async (event) => {
     if (mode === "register") {
       const name = fullName.value.trim();
       const credential = await createUserWithEmailAndPassword(auth, email, password);
-      await saveClientProfile(credential.user, name);
+      await saveClientProfile(credential.user, name, true);
       await sendEmailVerification(credential.user);
       await signOut(auth);
       form.reset();
@@ -117,7 +114,7 @@ form.addEventListener("submit", async (event) => {
         setStatus("Your email is not verified yet. We sent a fresh verification link; check your inbox.", "error");
         return;
       }
-      await saveClientProfile(credential.user);
+      await saveClientProfile(credential.user, "", false);
       setStatus("Signed in successfully. Opening your client portal…", "success");
       window.location.href = "firestore-client.html";
     }
@@ -129,7 +126,7 @@ form.addEventListener("submit", async (event) => {
       "auth/invalid-credential": "Email or password is incorrect.",
       "auth/too-many-requests": "Too many attempts. Please wait and try again."
     };
-    setStatus(messages[error.code] || error.message || "Something went wrong. Please try again.", "error");
+    setStatus((messages[error.code] || error.message || "Something went wrong. Please try again.") + (error.code ? " (" + error.code + ")" : ""), "error");
   } finally {
     submitButton.disabled = false;
   }
