@@ -46,6 +46,11 @@ function setMode(nextMode) {
 }
 
 async function saveClientProfile(user, name, createClient = false) {
+  // Refresh the account and ID token so Firestore rules see the latest
+  // email_verified claim, especially immediately after email verification.
+  await user.reload();
+  await user.getIdToken(true);
+
   const uid = user.uid;
   const cleanName = String(name || user.displayName || user.email?.split("@")[0] || "Client").trim().slice(0, 80);
   const userRef = doc(db, "users", uid);
@@ -116,7 +121,15 @@ form.addEventListener("submit", async (event) => {
         setStatus("Your email is not verified yet. We sent a fresh verification link; check your inbox.", "error");
         return;
       }
-      await saveClientProfile(credential.user);
+      try {
+        await saveClientProfile(credential.user);
+      } catch (profileError) {
+        console.error("Firestore profile sync failed:", profileError);
+        throw new Error(
+          "Your email and password are correct, but Firestore could not save your profile. Check the published Firestore rules and try again. " +
+          (profileError.code || profileError.message || "")
+        );
+      }
       setStatus("Signed in successfully. Opening your client portal…", "success");
       window.location.href = "firestore-client.html";
     }
