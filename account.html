@@ -3,65 +3,140 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080b14">
 <title>Account | Alpha Tech Hub</title>
-<meta name="description" content="Create an Alpha Tech Hub account or sign in to access your account.">
+<meta name="description" content="Sign in or create your Alpha Tech Hub account to manage your projects and services.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-.auth-section{min-height:calc(100vh - 82px);display:grid;place-items:center;padding:60px 20px}
-.auth-card{width:min(100%,480px);background:var(--card);border:1px solid var(--border);border-radius:22px;padding:clamp(22px,5vw,38px);box-shadow:0 25px 80px rgba(0,0,0,.25)}
-.auth-card h1{font-size:clamp(28px,6vw,38px);line-height:1.2;margin:10px 0}
-.auth-card p{color:var(--muted)}
-.auth-tabs{display:flex;gap:8px;margin:24px 0}
-.auth-tabs button{flex:1;padding:12px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--text);font-weight:700}
-.auth-tabs button.active{background:var(--gradient);border-color:transparent}
-.auth-form{display:grid;gap:15px}
-.auth-form label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
-.auth-form input{width:100%;padding:13px 14px;border-radius:10px;border:1px solid var(--border);background:#0a1020;color:var(--text);outline:none}
-.auth-form input:focus{border-color:var(--primary)}
-.auth-form .btn{width:100%;margin-top:4px}
-.auth-link{display:block;text-align:right;background:none;border:0;color:#79a9ff;font-size:13px;padding:6px 0}
-.auth-status{min-height:24px;margin-top:15px;font-size:14px;overflow-wrap:anywhere}
-.auth-status.error{color:#ff8a8a}.auth-status.success{color:#63e7b1}
-.auth-note{font-size:12px;margin-top:20px}
+:root{--auth-line:rgba(255,255,255,.1)}
+body{font-family:'DM Sans',Arial,sans-serif;background:#080b14}
+h1,h2,h3,.brand-text strong{font-family:'Space Grotesk',Arial,sans-serif}
+.auth-page{position:relative;min-height:calc(100vh - 82px);overflow:hidden;isolation:isolate}
+.auth-page:before,.auth-page:after{content:"";position:absolute;z-index:-1;border-radius:50%;filter:blur(2px);pointer-events:none}
+.auth-page:before{width:480px;height:480px;top:-240px;left:-170px;background:radial-gradient(circle,rgba(67,133,255,.2),transparent 68%)}
+.auth-page:after{width:520px;height:520px;right:-230px;bottom:-280px;background:radial-gradient(circle,rgba(155,92,255,.17),transparent 68%)}
+.auth-layout{width:min(1120px,calc(100% - 40px));min-height:calc(100vh - 82px);margin:auto;display:grid;grid-template-columns:1fr minmax(360px,470px);align-items:center;gap:clamp(38px,8vw,110px);padding:65px 0}
+.auth-story{max-width:510px}
+.auth-kicker{display:inline-flex;align-items:center;gap:9px;padding:8px 13px;border:1px solid rgba(105,164,255,.25);border-radius:30px;background:rgba(67,133,255,.08);color:#a9caff;font-size:11px;font-weight:700;letter-spacing:1.3px}
+.auth-kicker i{width:7px;height:7px;border-radius:50%;background:#54e6ae;box-shadow:0 0 12px #54e6ae}
+.auth-story h1{margin:25px 0 18px;font-size:clamp(40px,5.4vw,66px);line-height:1.08;letter-spacing:-2.7px}
+.auth-story>p{max-width:440px;color:#a4aec4;font-size:16px;line-height:1.9}
+.auth-benefits{display:grid;gap:17px;margin-top:34px}
+.auth-benefit{display:flex;align-items:center;gap:13px;color:#dce5f8;font-size:14px}
+.auth-benefit span{width:36px;height:36px;display:grid;place-items:center;flex:none;border:1px solid var(--auth-line);border-radius:11px;background:rgba(255,255,255,.035);font-size:16px}
+.auth-card{width:100%;padding:clamp(25px,4vw,36px);border:1px solid rgba(255,255,255,.11);border-radius:24px;background:linear-gradient(145deg,rgba(20,29,49,.97),rgba(12,18,32,.98));box-shadow:0 28px 90px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.04)}
+.auth-card-top{margin-bottom:25px}
+.auth-card-top .section-label{margin-bottom:9px}
+.auth-card h2{margin:0 0 8px;font-size:29px;letter-spacing:-.8px}
+.auth-card-top p{color:var(--muted);font-size:13px;line-height:1.7}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin:22px 0 24px;padding:5px;border:1px solid var(--auth-line);border-radius:13px;background:rgba(0,0,0,.2)}
+.auth-tabs button{min-height:43px;border:0;border-radius:9px;background:transparent;color:#9ca9c0;font:600 13px 'DM Sans',sans-serif;transition:.2s}
+.auth-tabs button.active{background:linear-gradient(120deg,#4385ff,#875bff);color:#fff;box-shadow:0 5px 18px rgba(67,133,255,.2)}
+.auth-form{display:grid;gap:16px}
+.auth-form label{display:block;margin-bottom:7px;color:#e4eaff;font-size:12px;font-weight:700}
+.auth-form input{width:100%;min-height:49px;padding:13px 14px;border:1px solid rgba(255,255,255,.12);border-radius:11px;outline:none;background:#090f1d;color:#f4f7ff;font:14px 'DM Sans',sans-serif;transition:border-color .2s,box-shadow .2s}
+.auth-form input::placeholder{color:#68758d}
+.auth-form input:focus{border-color:#6096ff;box-shadow:0 0 0 3px rgba(67,133,255,.12)}
+.auth-password{position:relative}
+.auth-password input{padding-right:70px}
+.password-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);padding:6px 7px;border:0;background:transparent;color:#8fb4ff;font-size:11px;font-weight:700}
+.auth-link{justify-self:end;margin-top:-7px;padding:3px 0;border:0;background:transparent;color:#8fb4ff;font:600 12px 'DM Sans',sans-serif}
+.auth-form .btn{width:100%;min-height:51px;margin-top:2px;border:0;font:700 14px 'DM Sans',sans-serif}
+.auth-form .btn:disabled{opacity:.65;cursor:wait;transform:none}
+.auth-status{min-height:22px;margin:13px 0 0;font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.auth-status.error{color:#ff9292}.auth-status.success{color:#63e7b1}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:22px 0 14px;color:#77849b;font-size:10px}
+.auth-divider:before,.auth-divider:after{content:"";height:1px;flex:1;background:var(--auth-line)}
+.auth-note{display:flex;align-items:flex-start;gap:9px;color:#8e9bb2;font-size:11px;line-height:1.7}
+.auth-note span{color:#63e7b1;font-size:14px}
+.auth-footer{margin-top:21px;text-align:center;color:#77849b;font-size:11px}
+.auth-footer a{color:#a9caff}
+.site-header .navbar{min-height:82px}
+.site-header .btn{min-height:41px;padding:9px 15px;font-size:12px}
 [hidden]{display:none!important}
+@media(max-width:820px){.auth-layout{grid-template-columns:1fr minmax(340px,440px);gap:30px}.auth-story h1{font-size:clamp(36px,5vw,50px)}.auth-story>p{font-size:14px}.auth-benefits{gap:12px}.auth-benefit{font-size:12px}}
+@media(max-width:680px){.site-header .navbar{min-height:70px}.site-header .btn{padding:8px 11px;font-size:11px}.auth-page{min-height:calc(100vh - 70px)}.auth-layout{width:min(100% - 30px,470px);min-height:auto;grid-template-columns:1fr;gap:27px;padding:38px 0 48px}.auth-story{max-width:100%;text-align:center}.auth-story h1{margin:17px 0 10px;font-size:clamp(36px,10vw,48px);letter-spacing:-1.8px}.auth-story>p{margin:auto;font-size:13px;line-height:1.7}.auth-benefits{display:none}.auth-card{padding:25px 21px;border-radius:20px}.auth-card h2{font-size:26px}}
+@media(max-width:380px){.brand-text{font-size:13px}.brand-text small{font-size:8px}.site-header .btn{font-size:10px}.auth-layout{width:calc(100% - 22px)}.auth-card{padding:22px 17px}}
 </style>
 </head>
 <body>
 <header class="site-header">
-<div class="container navbar">
-<a href="index.html" class="brand"><span class="brand-icon">A</span><span class="brand-text"><strong>Alpha Tech Hub</strong><small>BUILD. DESIGN. GROW.</small></span></a>
-<a class="btn btn-outline" href="index.html">← Back to website</a>
-</div>
+  <div class="container navbar">
+    <a href="index.html" class="brand" aria-label="Alpha Tech Hub home">
+      <span class="brand-icon">A</span>
+      <span class="brand-text"><strong>Alpha Tech Hub</strong><small>BUILD. DESIGN. GROW.</small></span>
+    </a>
+    <a class="btn btn-outline" href="index.html">← Back to website</a>
+  </div>
 </header>
-<main class="auth-section">
-<section class="auth-card" aria-labelledby="authTitle">
-<span class="section-label">ALPHA TECH HUB ACCOUNT</span>
-<h1 id="authTitle">Welcome to <span class="gradient-text">Alpha.</span></h1>
-<p id="authIntro">Sign in or create an account to get started.</p>
-<div class="auth-tabs" role="tablist">
-<button id="loginTab" class="active" type="button">Sign in</button>
-<button id="registerTab" type="button">Create account</button>
-</div>
-<form id="authForm" class="auth-form">
-<div id="nameField" hidden>
-<label for="fullName">Full name</label>
-<input id="fullName" autocomplete="name" maxlength="80" placeholder="Your full name">
-</div>
-<div>
-<label for="email">Email address</label>
-<input id="email" type="email" autocomplete="email" required placeholder="you@example.com">
-</div>
-<div>
-<label for="password">Password</label>
-<input id="password" type="password" autocomplete="current-password" minlength="6" required placeholder="At least 6 characters">
-</div>
-<button id="resetLink" class="auth-link" type="button">Forgot password?</button>
-<button id="submitButton" class="btn btn-primary" type="submit">Sign in</button>
-</form>
-<p id="authStatus" class="auth-status" role="status" aria-live="polite"></p>
-<p class="auth-note">Passwords are managed by Firebase Authentication. Alpha Tech Hub does not store your password in its database.</p>
-</section>
+
+<main class="auth-page">
+  <div class="auth-layout">
+    <section class="auth-story" aria-label="Account benefits">
+      <span class="auth-kicker"><i></i> YOUR DIGITAL WORKSPACE</span>
+      <h1>Ideas deserve<br><span class="gradient-text">to go further.</span></h1>
+      <p>Sign in to stay connected with your projects, track progress and manage your work with Alpha Tech Hub.</p>
+      <div class="auth-benefits">
+        <div class="auth-benefit"><span>✦</span> Keep your project information in one place</div>
+        <div class="auth-benefit"><span>↗</span> Follow updates on your requests</div>
+        <div class="auth-benefit"><span>⌑</span> Access your personal client portal</div>
+      </div>
+    </section>
+
+    <section class="auth-card" aria-labelledby="authTitle">
+      <div class="auth-card-top">
+        <span class="section-label">ALPHA TECH HUB ACCOUNT</span>
+        <h2 id="authTitle">Welcome back.</h2>
+        <p id="authIntro">Sign in to continue to your client workspace.</p>
+      </div>
+
+      <div class="auth-tabs" role="tablist" aria-label="Account options">
+        <button id="loginTab" class="active" type="button" role="tab" aria-selected="true">Sign in</button>
+        <button id="registerTab" type="button" role="tab" aria-selected="false">Create account</button>
+      </div>
+
+      <form id="authForm" class="auth-form">
+        <div id="nameField" hidden>
+          <label for="fullName">Full name</label>
+          <input id="fullName" autocomplete="name" maxlength="80" placeholder="Enter your full name">
+        </div>
+        <div>
+          <label for="email">Email address</label>
+          <input id="email" type="email" autocomplete="email" required placeholder="you@example.com">
+        </div>
+        <div>
+          <label for="password">Password</label>
+          <div class="auth-password">
+            <input id="password" type="password" autocomplete="current-password" minlength="6" required placeholder="Enter your password">
+            <button class="password-toggle" id="passwordToggle" type="button" aria-label="Show password" aria-pressed="false">Show</button>
+          </div>
+        </div>
+        <button id="resetLink" class="auth-link" type="button">Forgot password?</button>
+        <button id="submitButton" class="btn btn-primary" type="submit">Sign in <span aria-hidden="true">→</span></button>
+      </form>
+
+      <p id="authStatus" class="auth-status" role="status" aria-live="polite"></p>
+      <div class="auth-divider">ACCOUNT SECURITY</div>
+      <p class="auth-note"><span>✓</span> Your password is securely managed by Firebase Authentication. It is never stored in Alpha Tech Hub's database.</p>
+      <p class="auth-footer">Need help? <a href="contact.html">Contact Alpha Tech Hub</a></p>
+    </section>
+  </div>
 </main>
+
+<script>
+const passwordToggle = document.getElementById("passwordToggle");
+const passwordField = document.getElementById("password");
+passwordToggle.addEventListener("click", () => {
+  const showing = passwordField.type === "password";
+  passwordField.type = showing ? "text" : "password";
+  passwordToggle.textContent = showing ? "Hide" : "Show";
+  passwordToggle.setAttribute("aria-label", showing ? "Hide password" : "Show password");
+  passwordToggle.setAttribute("aria-pressed", String(showing));
+});
+</script>
 <script type="module" src="auth.js"></script>
 </body>
 </html>
