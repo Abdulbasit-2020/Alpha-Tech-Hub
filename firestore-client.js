@@ -1,6 +1,6 @@
 import { auth, db } from "./firestore.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { collection, doc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 const $ = id => document.getElementById(id);
 const message = $("portalMessage");
 const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -10,13 +10,13 @@ async function loadPortal(user){
   $("portalName").textContent=user.displayName||"Client";
   $("portalEmail").textContent=user.email||"";
   const [profileSnap,clientSnap,projectSnap,paymentSnap]=await Promise.all([
-    getDocs(query(collection(db,"users"),where("uid","==",user.uid))),
-    getDocs(query(collection(db,"clients"),where("uid","==",user.uid))),
+    getDoc(doc(db,"users",user.uid)),
+    getDoc(doc(db,"clients",user.uid)),
     getDocs(query(collection(db,"projects"),where("clientUid","==",user.uid))),
     getDocs(query(collection(db,"payments"),where("clientUid","==",user.uid)))
   ]);
-  const profile=profileSnap.docs[0]?.data()||{};
-  const client=clientSnap.docs[0]?.data()||{};
+  const profile=profileSnap.exists()?profileSnap.data():{};
+  const client=clientSnap.exists()?clientSnap.data():{};
   $("portalName").textContent=profile.fullName||client.fullName||user.displayName||"Client";
   $("portalProfile").innerHTML='<div><small class="muted">Name</small><strong>'+esc(profile.fullName||client.fullName||user.displayName||"Not provided")+'</strong></div><div><small class="muted">Email</small><strong>'+esc(user.email||"—")+'</strong></div><div><small class="muted">Account status</small><strong>'+esc(client.status||"Active")+'</strong></div><div><small class="muted">Email verification</small><strong>'+(user.emailVerified?"Verified":"Not verified")+'</strong></div>';
   const projects=projectSnap.docs.map(d=>({id:d.id,...d.data()}));
