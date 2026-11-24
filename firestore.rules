@@ -11,7 +11,7 @@ service cloud.firestore {
       ]) &&
       request.resource.data.uid == userId &&
       request.resource.data.email == request.auth.token.email &&
-      request.resource.data.emailVerified == request.auth.token.email_verified &&
+      request.resource.data.emailVerified is bool &&
       request.resource.data.fullName is string &&
       request.resource.data.fullName.size() > 0 &&
       request.resource.data.fullName.size() <= 80;
