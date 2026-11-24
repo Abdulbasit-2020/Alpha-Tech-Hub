@@ -66,7 +66,7 @@ service cloud.firestore {
     }
 
     match /clients/{clientId} {
-      allow read: if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow read: if isAdmin() || (signedIn() && request.auth.uid == clientId);
       allow create: if isAdmin() || validClientCreate(clientId);
       allow update, delete: if isAdmin();
     }
