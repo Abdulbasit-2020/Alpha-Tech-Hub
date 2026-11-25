@@ -1750,3 +1750,50 @@ img{height:auto}
  .visual-showcase img{height:185px}
  .service-photo-band .container{padding:30px 20px}
 }
+
+
+/* =========================================
+   ALPHA TECH HUB — OFFICIAL WHITE & GREEN THEME
+   Shared across every page using style.css
+========================================= */
+:root{
+  --bg:#f8fbf7;
+  --bg-light:#eff7ed;
+  --card:#ffffff;
+  --card-hover:#f3f9f2;
+  --primary:#167a45;
+  --secondary:#2f8d55;
+  --accent:#d8f36a;
+  --text:#183323;
+  --muted:#647568;
+  --border:#dfe9df;
+  --gradient:linear-gradient(135deg,#167a45,#2f965b);
+}
+body{background:#f8fbf7;color:#183323}
+.site-header{background:rgba(255,255,255,.96);border-bottom-color:#e1ebe1}
+.brand-icon{background:#167a45;color:#fff;box-shadow:none}
+.brand-text,.brand-text strong{color:#183323}
+.brand-text small{color:#647568}
+.nav-links a{color:#405b48}
+.nav-links a:hover,.nav-links a.active{color:#167a45}
+.nav-links a.active::after{background:#167a45}
+.menu-toggle{background:#eff7ed;color:#183323;border-color:#dfe9df}
+.btn-primary{background:linear-gradient(135deg,#167a45,#2f965b);color:#fff;box-shadow:0 8px 22px rgba(22,122,69,.15)}
+.btn-primary:hover{box-shadow:0 12px 28px rgba(22,122,69,.22)}
+.btn-outline{background:#fff;border-color:#cbdccb;color:#183323}
+.btn-outline:hover{background:#eff7ed;border-color:#167a45}
+.section-label,.eyebrow{color:#167a45}
+.gradient-text{background:linear-gradient(100deg,#167a45,#69a94d);-webkit-background-clip:text;background-clip:text;color:transparent}
+.dash-card,.portal-card,.client-project,.dash-status{background:#fff;border-color:#dfe9df;color:#183323;box-shadow:0 5px 20px rgba(20,70,35,.055)}
+.dash-card h2,.portal-card h2,.client-project-title{color:#183323}
+.dash-card p,.portal-card p,.muted,.dash-head p{color:#647568}
+.dash-card .dash-value{color:#183323}
+.dash-status{color:#526858}
+.dash-status.error{color:#b42318}
+.dash-status.success{color:#167a45}
+.dash-placeholder .placeholder-icon{color:#167a45}
+.client-project{background:#f7fbf6}
+.client-project-status,.portal-status{background:#e5f3e6;color:#17653a}
+.client-project-progress span,.bar span{background:linear-gradient(90deg,#167a45,#7ab85b)}
+.portal-item{background:#fff;border-color:#dfe9df}
+.portal-card .btn-primary{color:#fff}
