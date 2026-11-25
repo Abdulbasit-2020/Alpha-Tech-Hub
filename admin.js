@@ -322,9 +322,10 @@ onAuthStateChanged(auth, async user => {
   try {
     msg("Checking administrator permissions…");
     const token = await getIdTokenResult(user, true);
-    if (token.claims.admin !== true) {
-      msg("ACCESS DENIED — this account does not currently have the Firebase admin custom claim. No administrator data has been loaded. Contact the site owner to assign admin privileges.");
-      document.querySelector(".admin-shell").innerHTML = `<main style="max-width:680px;margin:10vh auto;padding:24px;font-family:system-ui;color:#17231c;background:#fff;border-radius:18px;box-shadow:0 8px 32px #0001"><h1>Administrator access required</h1><p>Your sign-in succeeded, but Firebase did not confirm administrator privileges for this account.</p><p>For security, the admin dashboard data has not been loaded.</p><a href="account.html">Return to sign-in</a></main>`;
+    const adminRecord = await getDoc(doc(db, "admins", user.uid));
+    if (token.claims.admin !== true && !adminRecord.exists()) {
+      msg("ACCESS DENIED — this account is not on the administrator allowlist. No administrator data has been loaded.");
+      document.querySelector(".admin-shell").innerHTML = `<main style="max-width:680px;margin:10vh auto;padding:24px;font-family:system-ui;color:#17231c;background:#fff;border-radius:18px;box-shadow:0 8px 32px #0001"><h1>Administrator access required</h1><p>Your sign-in succeeded, but this account is not listed as an administrator.</p><p>For security, the admin dashboard data has not been loaded.</p><a href="account.html">Return to sign-in</a></main>`;
       return;
     }
 
