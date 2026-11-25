@@ -1,5 +1,21 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Alpha Tech Hub | Admin</title><link rel="stylesheet" href="admin.css?v=e314490"><style>.ad-client-detail[hidden]{display:none}.ad-client-detail h3{margin:0 0 12px}.ad-client-detail .detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.ad-client-detail .detail-cell{background:var(--ad-panel2);padding:12px;border-radius:10px;overflow-wrap:anywhere}.ad-client-detail .detail-cell small{display:block;color:var(--ad-muted);margin-bottom:5px}@media(max-width:600px){.ad-client-detail .detail-grid{grid-template-columns:1fr}}</style></head>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Alpha Tech Hub | Admin</title><link rel="stylesheet" href="admin.css?v=e314490">
+<style>
+html,body{margin:0!important;min-height:100vh!important;background:#f7faf7!important}
+.admin-shell{display:flex!important;flex-direction:column!important;min-height:100vh!important}
+.admin-sidebar{position:relative!important;top:auto!important;width:100%!important;height:auto!important;min-height:0!important;display:block!important;background:#fff!important;border-bottom:1px solid #dce8dd!important}
+.ad-brand{display:flex!important;align-items:center!important}
+.ad-nav{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;max-width:100%!important}
+.ad-nav button{flex:0 0 auto!important}
+.ad-main{display:block!important;visibility:visible!important;opacity:1!important;width:100%!important;min-height:55vh!important;padding:22px 14px 40px!important;background:#f7faf7!important}
+.ad-topbar{display:flex!important;visibility:visible!important}
+.ad-section{display:none!important;visibility:visible!important}
+.ad-section.active{display:block!important;visibility:visible!important;min-height:200px!important}
+.ad-stat-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.ad-grid{display:grid!important;grid-template-columns:1fr!important}
+.ad-panel,.ad-stat{background:#fff!important;color:#193526!important}
+@media(min-width:900px){.admin-shell{display:grid!important;grid-template-columns:250px minmax(0,1fr)!important;flex-direction:initial!important}.admin-sidebar{width:auto!important;height:100vh!important;position:sticky!important;top:0!important}.ad-nav{display:grid!important;overflow:visible!important}.ad-main{padding:28px 36px!important}.ad-stat-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}.ad-grid{grid-template-columns:1.25fr 1fr!important}}
+</style><style>.ad-client-detail[hidden]{display:none}.ad-client-detail h3{margin:0 0 12px}.ad-client-detail .detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.ad-client-detail .detail-cell{background:var(--ad-panel2);padding:12px;border-radius:10px;overflow-wrap:anywhere}.ad-client-detail .detail-cell small{display:block;color:var(--ad-muted);margin-bottom:5px}@media(max-width:600px){.ad-client-detail .detail-grid{grid-template-columns:1fr}}</style></head>
 <body><div class="admin-shell">
 <aside class="admin-sidebar"><div class="ad-brand"><div class="ad-logo">A</div><div><strong>Alpha Tech Hub</strong><small>ADMIN WORKSPACE</small></div></div>
 <nav class="ad-nav" aria-label="Admin navigation"><button class="active" data-section="overview">◫ Overview</button><button data-section="clients">♙ Clients</button><button data-section="projects">▣ Projects</button><button data-section="requests">▤ Orders & Requests</button><button data-section="messages">✉ Messages</button><button data-section="files">▧ Files</button><button data-section="settings">⚙ Settings</button></nav>
