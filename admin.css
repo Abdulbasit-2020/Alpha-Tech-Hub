@@ -1,58 +1,59 @@
-:root{--ad-bg:#07111f;--ad-panel:#0d1b2b;--ad-panel2:#122338;--ad-border:#20364f;--ad-text:#eaf3ff;--ad-muted:#8fa8c2;--ad-blue:#3d8bff;--ad-cyan:#35d2e7}*{box-sizing:border-box}body{margin:0;background:var(--ad-bg);color:var(--ad-text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}.admin-shell{min-height:100vh;display:grid;grid-template-columns:250px 1fr}.admin-sidebar{background:#081421;border-right:1px solid var(--ad-border);padding:22px 16px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column}.ad-brand{display:flex;gap:12px;align-items:center;padding:8px 10px 24px}.ad-logo{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--ad-blue),var(--ad-cyan));display:grid;place-items:center;color:#fff;font-weight:900;font-size:22px}.ad-brand strong{display:block}.ad-brand small{color:var(--ad-muted);font-size:10px;letter-spacing:1.4px}.ad-nav{display:grid;gap:6px}.ad-nav button,.ad-sidebar-bottom a{width:100%;border:0;background:transparent;color:var(--ad-muted);text-align:left;padding:12px 13px;border-radius:11px;font:inherit;cursor:pointer;text-decoration:none}.ad-nav button:hover,.ad-nav button.active{background:var(--ad-panel2);color:white}.ad-nav button.active{box-shadow:inset 3px 0 var(--ad-cyan)}.ad-sidebar-bottom{margin-top:auto;display:grid;gap:8px}.ad-main{padding:28px clamp(16px,4vw,46px);max-width:1500px;width:100%;margin:auto}.ad-topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:28px}.ad-welcome h1{font-size:clamp(25px,3vw,36px);margin:7px 0}.ad-welcome p,.ad-muted{color:var(--ad-muted);margin:0}.ad-label{color:var(--ad-cyan);font-size:11px;letter-spacing:1.6px;font-weight:700}.ad-user{color:var(--ad-muted);font-size:13px}.ad-section{display:none}.ad-section.active{display:block}.ad-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:22px}.ad-stat,.ad-panel{background:var(--ad-panel);border:1px solid var(--ad-border);border-radius:16px;padding:19px}.ad-stat span{display:block;color:var(--ad-muted);font-size:13px}.ad-stat strong{display:block;font-size:29px;margin:10px 0 4px}.ad-stat small{color:var(--ad-muted)}.ad-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:16px}.ad-panel h2,.ad-panel h3{margin:0 0 8px}.ad-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}.ad-heading p{color:var(--ad-muted);margin:5px 0 0}.ad-btn{border:1px solid var(--ad-border);border-radius:10px;padding:10px 14px;background:var(--ad-panel2);color:var(--ad-text);cursor:pointer;font:inherit}.ad-btn.primary{background:linear-gradient(110deg,#2676f5,#18aeca);border:0;font-weight:700}.ad-btn:hover{filter:brightness(1.15)}.ad-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}.ad-toolbar input,.ad-toolbar select,.ad-form input,.ad-form textarea,.ad-form select{width:100%;background:#081523;color:var(--ad-text);border:1px solid var(--ad-border);border-radius:10px;padding:12px;font:inherit}.ad-toolbar input{flex:1;min-width:190px}.ad-list{display:grid;gap:11px}.ad-row{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;padding:15px;border:1px solid var(--ad-border);border-radius:13px;background:var(--ad-panel)}.ad-row strong{display:block;margin-bottom:4px}.ad-row small{display:block;color:var(--ad-muted);margin-top:4px;overflow-wrap:anywhere}.ad-empty{border:1px dashed var(--ad-border);border-radius:12px;padding:20px;color:var(--ad-muted)}.ad-form{display:grid;gap:12px}.ad-form label{display:grid;gap:6px;font-size:13px;color:var(--ad-muted)}.ad-form .ad-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ad-progress{height:7px;background:var(--ad-border);border-radius:10px;overflow:hidden;margin:9px 0}.ad-progress span{display:block;height:100%;background:linear-gradient(90deg,var(--ad-blue),var(--ad-cyan))}.ad-message{color:var(--ad-muted);font-size:13px}.ad-mobile-head{display:none}@media(max-width:1000px){.ad-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ad-grid{grid-template-columns:1fr}}@media(max-width:720px){.admin-shell{grid-template-columns:1fr}.admin-sidebar{position:static;height:auto;padding:12px;border-right:0;border-bottom:1px solid var(--ad-border)}.ad-brand{padding:5px 6px 13px}.ad-nav{display:flex;overflow-x:auto;gap:5px}.ad-nav button{white-space:nowrap;width:auto;padding:10px}.ad-sidebar-bottom{display:flex;margin-top:12px}.ad-sidebar-bottom a,.ad-sidebar-bottom button{width:auto}.ad-main{padding:20px 14px}.ad-stat-grid{gap:10px}.ad-stat{padding:15px}.ad-stat strong{font-size:25px}.ad-form .ad-two{grid-template-columns:1fr}.ad-topbar{margin-bottom:20px}}
-/* Alpha Tech Hub: match the main website's navy, blue and purple identity */
-:root{
-  --ad-bg:#080b14;
-  --ad-panel:#111a2d;
-  --ad-panel2:#0e1424;
-  --ad-border:rgba(255,255,255,.09);
-  --ad-text:#f4f7ff;
-  --ad-muted:#a4aec4;
-  --ad-blue:#4385ff;
-  --ad-cyan:#25d9e8;
-}
-body{background:var(--ad-bg);color:var(--ad-text)}
-.admin-sidebar{background:#070a12;border-right-color:var(--ad-border)}
-.ad-brand strong{color:var(--ad-text)}
-.ad-brand small{color:var(--ad-muted)}
-.ad-logo{background:linear-gradient(135deg,#4385ff,#9b5cff)}
-.ad-nav button,.ad-sidebar-bottom a{color:var(--ad-muted)}
-.ad-nav button:hover,.ad-nav button.active{background:#111a2d;color:#fff}
-.ad-nav button.active{box-shadow:inset 3px 0 #25d9e8}
-.ad-label{color:#8f9dff}
-.ad-user{background:#111a2d;border:1px solid var(--ad-border);padding:10px 13px;border-radius:12px;color:var(--ad-muted)}
-.ad-stat,.ad-panel,.ad-row{box-shadow:0 6px 20px rgba(0,0,0,.16)}
-.ad-stat{border-top:3px solid #4385ff}
-.ad-btn{background:#0e1424;color:var(--ad-text);border-color:var(--ad-border)}
-.ad-btn.primary{background:linear-gradient(110deg,#4385ff,#9b5cff);color:white}
-.ad-toolbar input,.ad-toolbar select,.ad-form input,.ad-form textarea,.ad-form select{background:#080b14;color:var(--ad-text);border-color:var(--ad-border)}
-.ad-progress span{background:linear-gradient(90deg,#4385ff,#25d9e8)}
-.ad-empty{background:#0e1424}
-.ad-section.active{animation:adminFade .18s ease-out}
-@keyframes adminFade{from{opacity:.6;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+/* Alpha Tech Hub Admin Workspace — clean responsive white/green theme */
+*{box-sizing:border-box}
+:root{--ad-bg:#f7faf7;--ad-panel:#fff;--ad-panel2:#edf6ee;--ad-border:#dce8dd;--ad-text:#193526;--ad-muted:#647568;--ad-green:#167a45;--ad-green2:#2f965b}
+html,body{margin:0;min-height:100%;background:var(--ad-bg);color:var(--ad-text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{min-height:100vh}
+.admin-shell{min-height:100vh;display:grid;grid-template-columns:250px minmax(0,1fr);align-items:stretch}
+.admin-sidebar{background:#fff;border-right:1px solid var(--ad-border);padding:22px 16px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;z-index:5}
+.ad-brand{display:flex;gap:12px;align-items:center;padding:8px 10px 24px}
+.ad-logo{width:42px;height:42px;flex:0 0 42px;border-radius:13px;background:linear-gradient(135deg,var(--ad-green),#70a94d);display:grid;place-items:center;color:#fff;font-weight:900;font-size:22px}
+.ad-brand strong{display:block;color:var(--ad-text)}.ad-brand small{display:block;color:var(--ad-muted);font-size:10px;letter-spacing:1.4px}
+.ad-nav{display:grid;gap:6px}
+.ad-nav button,.ad-sidebar-bottom a{width:100%;border:0;background:transparent;color:#526858;text-align:left;padding:12px 13px;border-radius:11px;font:inherit;cursor:pointer;text-decoration:none;white-space:nowrap}
+.ad-nav button:hover,.ad-nav button.active{background:#eaf5e9;color:#17653a}
+.ad-nav button.active{box-shadow:inset 3px 0 var(--ad-green);font-weight:700}
+.ad-sidebar-bottom{margin-top:auto;display:grid;gap:8px}
+.ad-main{display:block!important;visibility:visible!important;min-width:0;width:100%;max-width:1500px;margin:0 auto;padding:28px clamp(16px,4vw,46px)}
+.ad-topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin:0 0 28px}
+.ad-welcome h1{font-size:clamp(25px,3vw,36px);margin:7px 0;color:var(--ad-text)}
+.ad-welcome p,.ad-muted{color:var(--ad-muted);margin:0}
+.ad-label{color:var(--ad-green);font-size:11px;letter-spacing:1.6px;font-weight:700}
+.ad-user{color:var(--ad-muted);font-size:13px;background:#f7fbf6;border:1px solid var(--ad-border);padding:10px 13px;border-radius:12px}
+.ad-section{display:none;width:100%}.ad-section.active{display:block!important;visibility:visible;animation:adFade .18s ease-out}
+@keyframes adFade{from{opacity:.5;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+.ad-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:22px}
+.ad-stat,.ad-panel{background:var(--ad-panel);border:1px solid var(--ad-border);border-radius:16px;padding:19px;box-shadow:0 5px 20px rgba(20,70,35,.055)}
+.ad-stat{border-top:3px solid var(--ad-green)}
+.ad-stat span{display:block;color:var(--ad-muted);font-size:13px}.ad-stat strong{display:block;color:var(--ad-text);font-size:29px;margin:10px 0 4px}.ad-stat small{color:var(--ad-muted)}
+.ad-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:16px}
+.ad-panel h2,.ad-panel h3{margin:0 0 8px;color:var(--ad-text)}
+.ad-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.ad-heading p{color:var(--ad-muted);margin:5px 0 0}
+.ad-btn{display:inline-block;border:1px solid #cbdccb;border-radius:10px;padding:10px 14px;background:var(--ad-panel2);color:var(--ad-text);cursor:pointer;font:inherit;text-decoration:none}
+.ad-btn.primary{background:linear-gradient(135deg,var(--ad-green),var(--ad-green2));color:#fff;border:0;font-weight:700}
+.ad-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}
+.ad-toolbar input,.ad-toolbar select,.ad-form input,.ad-form textarea,.ad-form select{width:100%;background:#fff;color:var(--ad-text);border:1px solid #d4e2d4;border-radius:10px;padding:12px;font:inherit}
+.ad-toolbar input{flex:1;min-width:190px}
+.ad-list{display:grid;gap:11px}
+.ad-row{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;padding:15px;border:1px solid var(--ad-border);border-radius:13px;background:#fff}
+.ad-row strong{display:block;color:var(--ad-text);margin-bottom:4px}.ad-row small{display:block;color:var(--ad-muted);margin-top:4px;overflow-wrap:anywhere}
+.ad-empty{border:1px dashed #cbdccb;border-radius:12px;padding:20px;background:#f7fbf6;color:var(--ad-muted)}
+.ad-form{display:grid;gap:12px}.ad-form label{display:grid;gap:6px;font-size:13px;color:var(--ad-muted)}.ad-form .ad-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ad-progress{height:7px;background:#e5eee4;border-radius:10px;overflow:hidden;margin:9px 0}.ad-progress span{display:block;height:100%;background:linear-gradient(90deg,var(--ad-green),#70a94d)}
+.ad-message{color:var(--ad-muted);font-size:13px}
+.ad-client-detail[hidden],.ad-form[hidden]{display:none!important}
+@media(max-width:1000px){.ad-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ad-grid{grid-template-columns:1fr}}
 @media(max-width:720px){
-  .admin-sidebar{background:#070a12}
-  .ad-nav button.active{box-shadow:inset 0 -3px #25d9e8}
-  .ad-user{width:100%}
+ .admin-shell{display:flex;flex-direction:column;min-height:100vh}
+ .admin-sidebar{position:relative;top:auto;height:auto;width:100%;padding:12px;border-right:0;border-bottom:1px solid var(--ad-border)}
+ .ad-brand{padding:5px 6px 13px}
+ .ad-nav{display:flex;overflow-x:auto;gap:5px;padding-bottom:3px}
+ .ad-nav button{width:auto;flex:0 0 auto;padding:10px}
+ .ad-nav button.active{box-shadow:inset 0 -3px var(--ad-green)}
+ .ad-sidebar-bottom{display:flex;margin-top:10px}
+ .ad-sidebar-bottom a,.ad-sidebar-bottom button{width:auto}
+ .ad-main{display:block!important;width:100%;padding:20px 14px 36px}
+ .ad-topbar{margin-bottom:20px}
+ .ad-stat-grid{gap:10px}.ad-stat{padding:15px}.ad-stat strong{font-size:25px}
+ .ad-form .ad-two{grid-template-columns:1fr}
 }
-
-/* Official Alpha Tech Hub white and green admin workspace */
-:root{--ad-bg:#f8fbf7;--ad-panel:#fff;--ad-panel2:#eff7ed;--ad-border:#dfe9df;--ad-text:#183323;--ad-muted:#647568;--ad-blue:#167a45;--ad-cyan:#70a94d}
-body{background:#f8fbf7!important;color:#183323!important}
-.admin-sidebar{background:#fff!important;border-right:1px solid #dfe9df!important;box-shadow:4px 0 22px rgba(20,70,35,.04)}
-.ad-brand strong{color:#183323!important}.ad-brand small{color:#647568!important}
-.ad-logo{background:linear-gradient(135deg,#167a45,#70a94d)!important;color:#fff}
-.ad-nav button,.ad-sidebar-bottom a{color:#526858}
-.ad-nav button:hover,.ad-nav button.active{background:#eaf5e9!important;color:#17653a!important}
-.ad-nav button.active{box-shadow:inset 3px 0 #167a45!important}
-.ad-label{color:#167a45!important}.ad-user{color:#526858;background:#f7fbf6;border:1px solid #dfe9df;padding:10px 13px;border-radius:12px}
-.ad-stat,.ad-panel,.ad-row{background:#fff!important;border:1px solid #dfe9df!important;box-shadow:0 5px 20px rgba(20,70,35,.055)}
-.ad-stat span,.ad-stat small,.ad-muted,.ad-heading p,.ad-row small{color:#647568!important}
-.ad-stat strong,.ad-panel h2,.ad-panel h3,.ad-row strong{color:#183323}
-.ad-stat{border-top:3px solid #167a45!important}
-.ad-btn{background:#eff7ed!important;color:#183323!important;border-color:#cbdccb!important}
-.ad-btn.primary{background:linear-gradient(135deg,#167a45,#2f965b)!important;color:#fff!important;border:0}
-.ad-toolbar input,.ad-toolbar select,.ad-form input,.ad-form textarea,.ad-form select{background:#fff!important;color:#183323!important;border-color:#d4e2d4!important}
-.ad-progress{background:#e5eee4!important}.ad-progress span{background:linear-gradient(90deg,#167a45,#70a94d)!important}
-.ad-empty{background:#f7fbf6!important;border-color:#cbdccb!important;color:#647568!important}
-.ad-message{color:#647568!important}
-@media(max-width:720px){.admin-sidebar{background:#fff!important;border-bottom:1px solid #dfe9df!important}.ad-nav button.active{box-shadow:inset 0 -3px #167a45!important}}
