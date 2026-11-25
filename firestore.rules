@@ -58,7 +58,14 @@ service cloud.firestore {
        (signedIn() && request.resource.data.submittedBy == request.auth.uid));
     }
 
-    // Admin allowlist documents are created manually by the project owner in Firebase Console.\n    // Signed-in users may check only their own admin record; clients cannot create or modify admin records.\n    match /admins/{adminId} {\n      allow read: if signedIn() && request.auth.uid == adminId;\n      allow write: if false;\n    }\n\n    match /users/{userId} {
+    // Admin allowlist documents are created manually by the project owner in Firebase Console.
+// Signed-in users may check only their own admin record; clients cannot create or modify admin records.
+match /admins/{adminId} {
+  allow read: if signedIn() && request.auth.uid == adminId;
+  allow write: if false;
+}
+
+    match /users/{userId} {
       allow read: if isAdmin() || (signedIn() && request.auth.uid == userId);
       allow create, update: if isAdmin() ||
         (signedIn() && request.auth.uid == userId && validUserProfile(userId));
